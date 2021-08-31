@@ -85,7 +85,7 @@ export type ProductTileFragmentFragment = (
 
 export type ProductFragmentFragment = (
   { __typename?: 'ProductType' }
-  & Pick<ProductType, 'id' | 'name' | 'price' | 'description' | 'weight' | 'image' | 'thumbnail' | 'createdDate' | 'stock'>
+  & Pick<ProductType, 'id' | 'name' | 'price' | 'sku' | 'description' | 'weight' | 'image' | 'thumbnail' | 'createdDate' | 'stock'>
   & { category: (
     { __typename?: 'CategoryType' }
     & CategoryFragmentFragment
@@ -95,10 +95,10 @@ export type ProductFragmentFragment = (
   )>>> }
 );
 
-export type GetAllProductsQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllProductsQueryQuery = (
+export type GetAllProductsQuery = (
   { __typename?: 'Query' }
   & { getAllProducts?: Maybe<Array<Maybe<(
     { __typename?: 'ProductType' }
@@ -127,6 +127,7 @@ export const ProductFragmentFragmentDoc = gql`
   id
   name
   price
+  sku
   description
   weight
   image
@@ -142,8 +143,8 @@ export const ProductFragmentFragmentDoc = gql`
   }
 }
     ${CategoryFragmentFragmentDoc}`;
-export const GetAllProductsQueryDocument = gql`
-    query getAllProductsQuery {
+export const GetAllProductsDocument = gql`
+    query getAllProducts {
   getAllProducts {
     ...ProductFragment
   }
@@ -151,29 +152,29 @@ export const GetAllProductsQueryDocument = gql`
     ${ProductFragmentFragmentDoc}`;
 
 /**
- * __useGetAllProductsQueryQuery__
+ * __useGetAllProductsQuery__
  *
- * To run a query within a React component, call `useGetAllProductsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllProductsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllProductsQueryQuery({
+ * const { data, loading, error } = useGetAllProductsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetAllProductsQueryQuery(baseOptions?: Apollo.QueryHookOptions<GetAllProductsQueryQuery, GetAllProductsQueryQueryVariables>) {
-        return Apollo.useQuery<GetAllProductsQueryQuery, GetAllProductsQueryQueryVariables>(GetAllProductsQueryDocument, baseOptions);
+export function useGetAllProductsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllProductsQuery, GetAllProductsQueryVariables>) {
+        return Apollo.useQuery<GetAllProductsQuery, GetAllProductsQueryVariables>(GetAllProductsDocument, baseOptions);
       }
-export function useGetAllProductsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllProductsQueryQuery, GetAllProductsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllProductsQueryQuery, GetAllProductsQueryQueryVariables>(GetAllProductsQueryDocument, baseOptions);
+export function useGetAllProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllProductsQuery, GetAllProductsQueryVariables>) {
+          return Apollo.useLazyQuery<GetAllProductsQuery, GetAllProductsQueryVariables>(GetAllProductsDocument, baseOptions);
         }
-export type GetAllProductsQueryQueryHookResult = ReturnType<typeof useGetAllProductsQueryQuery>;
-export type GetAllProductsQueryLazyQueryHookResult = ReturnType<typeof useGetAllProductsQueryLazyQuery>;
-export type GetAllProductsQueryQueryResult = Apollo.QueryResult<GetAllProductsQueryQuery, GetAllProductsQueryQueryVariables>;
+export type GetAllProductsQueryHookResult = ReturnType<typeof useGetAllProductsQuery>;
+export type GetAllProductsLazyQueryHookResult = ReturnType<typeof useGetAllProductsLazyQuery>;
+export type GetAllProductsQueryResult = Apollo.QueryResult<GetAllProductsQuery, GetAllProductsQueryVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {

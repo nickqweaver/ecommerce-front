@@ -15,6 +15,7 @@ export const ProductFragment = gql`
     id
     name
     price
+    sku
     description
     weight
     image

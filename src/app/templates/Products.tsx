@@ -1,8 +1,21 @@
 import React from "react";
+import { ProductType } from "../../graphql/generated/types";
+import { ProductCard } from "../components/ProductCard";
 
 interface ProductsProps {
-  products: string;
+  products: ProductType[];
 }
 export function Products(props: ProductsProps) {
-  return <div></div>;
+  const { products } = props;
+  return (
+    <div>
+      {products.map((product) => (
+        <ProductCard
+          image={product.image}
+          title={product.name}
+          price={product.price}
+        />
+      ))}
+    </div>
+  );
 }
