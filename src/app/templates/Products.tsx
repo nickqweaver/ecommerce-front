@@ -10,11 +10,7 @@ export function Products(props: ProductsProps) {
   return (
     <div>
       {products.map((product) => (
-        <ProductCard
-          image={product.image}
-          title={product.name}
-          price={product.price}
-        />
+        <div />
       ))}
     </div>
   );

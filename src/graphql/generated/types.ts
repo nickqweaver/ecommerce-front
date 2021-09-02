@@ -21,6 +21,8 @@ export type Scalars = {
   Decimal: any;
 };
 
+export type AllProductType = WheelProductType | TireProductType;
+
 export type CategoryType = {
   __typename?: 'CategoryType';
   id: Scalars['ID'];
@@ -32,35 +34,43 @@ export type CategoryType = {
 
 
 
-export type ProductOption = {
-  __typename?: 'ProductOption';
-  optionCategory?: Maybe<Scalars['String']>;
-  options?: Maybe<Array<Maybe<Scalars['String']>>>;
+export type PaginatedProductsType = {
+  __typename?: 'PaginatedProductsType';
+  hasMore?: Maybe<Scalars['Boolean']>;
+  results?: Maybe<Array<Maybe<AllProductType>>>;
 };
 
 export type ProductType = {
   __typename?: 'ProductType';
   id: Scalars['ID'];
-  sku: Scalars['String'];
   name: Scalars['String'];
-  price: Scalars['Decimal'];
-  description: Scalars['String'];
-  weight: Scalars['Decimal'];
   image: Scalars['String'];
-  thumbnail: Scalars['String'];
-  createdDate: Scalars['Date'];
+  description: Scalars['String'];
   category: CategoryType;
-  stock: Scalars['Int'];
-  productOptions?: Maybe<Array<Maybe<ProductOption>>>;
+  createdDate: Scalars['Date'];
+  slug: Scalars['String'];
+  weight: Scalars['Decimal'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  getAllCategoryNames?: Maybe<Array<Maybe<Scalars['String']>>>;
+  getAllProducts?: Maybe<Array<Maybe<AllProductType>>>;
+  getProductById?: Maybe<AllProductType>;
+  getAllPaginatedProducts?: Maybe<PaginatedProductsType>;
   getAllCategories?: Maybe<Array<Maybe<CategoryType>>>;
-  getProductsFromCategory?: Maybe<Array<Maybe<ProductType>>>;
-  getAllProducts?: Maybe<Array<Maybe<ProductType>>>;
-  getProductById?: Maybe<ProductType>;
+  getProductsFromCategory?: Maybe<Array<Maybe<AllProductType>>>;
+  getPaginatedProductsFromCategory?: Maybe<PaginatedProductsType>;
+};
+
+
+export type QueryGetProductByIdArgs = {
+  id?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryGetAllPaginatedProductsArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -69,30 +79,109 @@ export type QueryGetProductsFromCategoryArgs = {
 };
 
 
-export type QueryGetProductByIdArgs = {
-  id?: Maybe<Scalars['ID']>;
+export type QueryGetPaginatedProductsFromCategoryArgs = {
+  categoryName?: Maybe<Scalars['String']>;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+export type TireProductType = {
+  __typename?: 'TireProductType';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  image: Scalars['String'];
+  description: Scalars['String'];
+  category: CategoryType;
+  brand?: Maybe<Scalars['String']>;
+  createdDate: Scalars['Date'];
+  slug: Scalars['String'];
+  weight: Scalars['Decimal'];
+  baseproductPtr: ProductType;
+  variants?: Maybe<Array<Maybe<TireVariantType>>>;
+  lowestVariantPrice?: Maybe<Scalars['Decimal']>;
+  hasDifferentVariantPricing?: Maybe<Scalars['Boolean']>;
+};
+
+/** An enumeration. */
+export enum TireProductVariantHeight {
+  /** 28 */
+  A_28 = 'A_28',
+  /** 29 */
+  A_29 = 'A_29',
+  /** 31 */
+  A_31 = 'A_31',
+  /** 32 */
+  A_32 = 'A_32',
+  /** 33 */
+  A_33 = 'A_33',
+  /** 34 */
+  A_34 = 'A_34',
+  /** 35 */
+  A_35 = 'A_35'
+}
+
+/** An enumeration. */
+export enum TireProductVariantRimCircumference {
+  /** 14 */
+  A_14 = 'A_14',
+  /** 15 */
+  A_15 = 'A_15',
+  /** 16 */
+  A_16 = 'A_16'
+}
+
+/** An enumeration. */
+export enum TireProductVariantWidth {
+  /** 8 */
+  A_8 = 'A_8',
+  /** 9 */
+  A_9 = 'A_9',
+  /** 10 */
+  A_10 = 'A_10'
+}
+
+export type TireVariantType = {
+  __typename?: 'TireVariantType';
+  id: Scalars['ID'];
+  productCode: Scalars['String'];
+  stock: Scalars['Int'];
+  unitPrice: Scalars['Decimal'];
+  height: TireProductVariantHeight;
+  width: TireProductVariantWidth;
+  rimCircumference: TireProductVariantRimCircumference;
+};
+
+export type WheelProductType = {
+  __typename?: 'WheelProductType';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  image: Scalars['String'];
+  description: Scalars['String'];
+  category: CategoryType;
+  brand?: Maybe<Scalars['String']>;
+  createdDate: Scalars['Date'];
+  slug: Scalars['String'];
+  weight: Scalars['Decimal'];
+  baseproductPtr: ProductType;
+  variants?: Maybe<Array<Maybe<WheelVariantType>>>;
+  lowestVariantPrice?: Maybe<Scalars['Decimal']>;
+  hasDifferentVariantPricing?: Maybe<Scalars['Boolean']>;
+};
+
+export type WheelVariantType = {
+  __typename?: 'WheelVariantType';
+  id: Scalars['ID'];
+  productCode: Scalars['String'];
+  stock: Scalars['Int'];
+  unitPrice: Scalars['Decimal'];
+  size: Scalars['String'];
+  boltPattern: Scalars['String'];
+  finish: Scalars['String'];
 };
 
 export type CategoryFragmentFragment = (
   { __typename?: 'CategoryType' }
   & Pick<CategoryType, 'id' | 'name' | 'description' | 'thumbnail'>
-);
-
-export type ProductTileFragmentFragment = (
-  { __typename?: 'ProductType' }
-  & Pick<ProductType, 'name' | 'price' | 'thumbnail' | 'id'>
-);
-
-export type ProductFragmentFragment = (
-  { __typename?: 'ProductType' }
-  & Pick<ProductType, 'id' | 'name' | 'price' | 'sku' | 'description' | 'weight' | 'image' | 'thumbnail' | 'createdDate' | 'stock'>
-  & { category: (
-    { __typename?: 'CategoryType' }
-    & CategoryFragmentFragment
-  ), productOptions?: Maybe<Array<Maybe<(
-    { __typename?: 'ProductOption' }
-    & Pick<ProductOption, 'options' | 'optionCategory'>
-  )>>> }
 );
 
 export type GetAllProductsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -101,19 +190,22 @@ export type GetAllProductsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAllProductsQuery = (
   { __typename?: 'Query' }
   & { getAllProducts?: Maybe<Array<Maybe<(
-    { __typename?: 'ProductType' }
-    & ProductFragmentFragment
+    { __typename?: 'WheelProductType' }
+    & Pick<WheelProductType, 'name' | 'lowestVariantPrice' | 'brand'>
+    & { variants?: Maybe<Array<Maybe<(
+      { __typename?: 'WheelVariantType' }
+      & Pick<WheelVariantType, 'finish' | 'boltPattern' | 'size'>
+    )>>> }
+  ) | (
+    { __typename?: 'TireProductType' }
+    & Pick<TireProductType, 'name' | 'lowestVariantPrice' | 'id' | 'brand'>
+    & { variants?: Maybe<Array<Maybe<(
+      { __typename?: 'TireVariantType' }
+      & Pick<TireVariantType, 'width' | 'productCode' | 'unitPrice' | 'rimCircumference' | 'height'>
+    )>>> }
   )>>> }
 );
 
-export const ProductTileFragmentFragmentDoc = gql`
-    fragment ProductTileFragment on ProductType {
-  name
-  price
-  thumbnail
-  id
-}
-    `;
 export const CategoryFragmentFragmentDoc = gql`
     fragment CategoryFragment on CategoryType {
   id
@@ -122,34 +214,35 @@ export const CategoryFragmentFragmentDoc = gql`
   thumbnail
 }
     `;
-export const ProductFragmentFragmentDoc = gql`
-    fragment ProductFragment on ProductType {
-  id
-  name
-  price
-  sku
-  description
-  weight
-  image
-  thumbnail
-  createdDate
-  category {
-    ...CategoryFragment
-  }
-  stock
-  productOptions {
-    options
-    optionCategory
-  }
-}
-    ${CategoryFragmentFragmentDoc}`;
 export const GetAllProductsDocument = gql`
     query getAllProducts {
   getAllProducts {
-    ...ProductFragment
+    ... on TireProductType {
+      name
+      lowestVariantPrice
+      id
+      brand
+      variants {
+        width
+        productCode
+        unitPrice
+        rimCircumference
+        height
+      }
+    }
+    ... on WheelProductType {
+      name
+      lowestVariantPrice
+      brand
+      variants {
+        finish
+        boltPattern
+        size
+      }
+    }
   }
 }
-    ${ProductFragmentFragmentDoc}`;
+    `;
 
 /**
  * __useGetAllProductsQuery__
@@ -182,7 +275,12 @@ export type GetAllProductsQueryResult = Apollo.QueryResult<GetAllProductsQuery, 
         }
       }
       const result: PossibleTypesResultData = {
-  "possibleTypes": {}
+  "possibleTypes": {
+    "AllProductType": [
+      "WheelProductType",
+      "TireProductType"
+    ]
+  }
 };
       export default result;
     
