@@ -1,22 +1,16 @@
 import React from "react";
 import {
   ProductType,
-  useGetAllProductsQuery,
+  useGetAllProductTilesQuery,
 } from "../graphql/generated/types";
 import { Products } from "./templates/Products";
 
 function App() {
-  const { data, loading: isLoading, error } = useGetAllProductsQuery();
-  const products = data?.getAllProducts;
+  const { data, loading: isLoading, error } = useGetAllProductTilesQuery({
+    variables: { offset: 0, limit: 10 },
+  });
+  console.log(data);
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-  // if (products && products !== null) {
-  //   return <Products products={products as ProductType[]} />;
-  // } else {
-  //   return <div>No products found</div>;
-  // }
   return <div>Getr em</div>;
 }
 

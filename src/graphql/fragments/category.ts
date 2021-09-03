@@ -8,17 +8,3 @@ export const CategoryFragment = gql`
     thumbnail
   }
 `;
-/**
-  * {
-  * Fragment for tile below
-  getProductsFromCategory(categoryName: "wheels") {
-    ... on WheelProductType {
-      brand
-      lowestVariantPrice
-      hasDifferentVariantPricing
-      id
-      name
-    }
-  }
-}
-  */

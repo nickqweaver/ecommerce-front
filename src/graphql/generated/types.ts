@@ -21,27 +21,10 @@ export type Scalars = {
   Decimal: any;
 };
 
-export type AllProductType = WheelProductType | TireProductType;
+export type AllVariantsType = WheelVariantType | TireVariantType;
 
-export type CategoryType = {
-  __typename?: 'CategoryType';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  description: Scalars['String'];
-  thumbnail: Scalars['String'];
-  products?: Maybe<Array<Maybe<ProductType>>>;
-};
-
-
-
-export type PaginatedProductsType = {
-  __typename?: 'PaginatedProductsType';
-  hasMore?: Maybe<Scalars['Boolean']>;
-  results?: Maybe<Array<Maybe<AllProductType>>>;
-};
-
-export type ProductType = {
-  __typename?: 'ProductType';
+export type BaseProductType = {
+  __typename?: 'BaseProductType';
   id: Scalars['ID'];
   name: Scalars['String'];
   image: Scalars['String'];
@@ -52,14 +35,53 @@ export type ProductType = {
   weight: Scalars['Decimal'];
 };
 
+export type CategoryType = {
+  __typename?: 'CategoryType';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  thumbnail: Scalars['String'];
+  products: Array<BaseProductType>;
+};
+
+
+
+export type PaginatedProductIdsType = {
+  __typename?: 'PaginatedProductIdsType';
+  hasMore?: Maybe<Scalars['Boolean']>;
+  results?: Maybe<Array<Maybe<Scalars['ID']>>>;
+};
+
+export type PaginatedProductsType = {
+  __typename?: 'PaginatedProductsType';
+  hasMore?: Maybe<Scalars['Boolean']>;
+  results?: Maybe<Array<Maybe<ProductType>>>;
+};
+
+export type ProductType = {
+  __typename?: 'ProductType';
+  name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  image?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  category?: Maybe<CategoryType>;
+  createdDate?: Maybe<Scalars['Date']>;
+  slug?: Maybe<Scalars['String']>;
+  weight?: Maybe<Scalars['Decimal']>;
+  variants?: Maybe<Array<Maybe<AllVariantsType>>>;
+  brand?: Maybe<Scalars['String']>;
+  lowestVariantPrice?: Maybe<Scalars['Decimal']>;
+  hasDifferentVariantPricing?: Maybe<Scalars['Boolean']>;
+};
+
 export type Query = {
   __typename?: 'Query';
-  getAllProducts?: Maybe<Array<Maybe<AllProductType>>>;
-  getProductById?: Maybe<AllProductType>;
+  getAllProducts?: Maybe<Array<Maybe<ProductType>>>;
+  getProductById?: Maybe<ProductType>;
   getAllPaginatedProducts?: Maybe<PaginatedProductsType>;
   getAllCategories?: Maybe<Array<Maybe<CategoryType>>>;
-  getProductsFromCategory?: Maybe<Array<Maybe<AllProductType>>>;
-  getPaginatedProductsFromCategory?: Maybe<PaginatedProductsType>;
+  getProductIdsFromCategory?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  getPaginatedProductIdsFromCategory?: Maybe<PaginatedProductIdsType>;
 };
 
 
@@ -74,71 +96,16 @@ export type QueryGetAllPaginatedProductsArgs = {
 };
 
 
-export type QueryGetProductsFromCategoryArgs = {
+export type QueryGetProductIdsFromCategoryArgs = {
   categoryName?: Maybe<Scalars['String']>;
 };
 
 
-export type QueryGetPaginatedProductsFromCategoryArgs = {
+export type QueryGetPaginatedProductIdsFromCategoryArgs = {
   categoryName?: Maybe<Scalars['String']>;
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
 };
-
-export type TireProductType = {
-  __typename?: 'TireProductType';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  image: Scalars['String'];
-  description: Scalars['String'];
-  category: CategoryType;
-  brand?: Maybe<Scalars['String']>;
-  createdDate: Scalars['Date'];
-  slug: Scalars['String'];
-  weight: Scalars['Decimal'];
-  baseproductPtr: ProductType;
-  variants?: Maybe<Array<Maybe<TireVariantType>>>;
-  lowestVariantPrice?: Maybe<Scalars['Decimal']>;
-  hasDifferentVariantPricing?: Maybe<Scalars['Boolean']>;
-};
-
-/** An enumeration. */
-export enum TireProductVariantHeight {
-  /** 28 */
-  A_28 = 'A_28',
-  /** 29 */
-  A_29 = 'A_29',
-  /** 31 */
-  A_31 = 'A_31',
-  /** 32 */
-  A_32 = 'A_32',
-  /** 33 */
-  A_33 = 'A_33',
-  /** 34 */
-  A_34 = 'A_34',
-  /** 35 */
-  A_35 = 'A_35'
-}
-
-/** An enumeration. */
-export enum TireProductVariantRimCircumference {
-  /** 14 */
-  A_14 = 'A_14',
-  /** 15 */
-  A_15 = 'A_15',
-  /** 16 */
-  A_16 = 'A_16'
-}
-
-/** An enumeration. */
-export enum TireProductVariantWidth {
-  /** 8 */
-  A_8 = 'A_8',
-  /** 9 */
-  A_9 = 'A_9',
-  /** 10 */
-  A_10 = 'A_10'
-}
 
 export type TireVariantType = {
   __typename?: 'TireVariantType';
@@ -146,26 +113,9 @@ export type TireVariantType = {
   productCode: Scalars['String'];
   stock: Scalars['Int'];
   unitPrice: Scalars['Decimal'];
-  height: TireProductVariantHeight;
-  width: TireProductVariantWidth;
-  rimCircumference: TireProductVariantRimCircumference;
-};
-
-export type WheelProductType = {
-  __typename?: 'WheelProductType';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  image: Scalars['String'];
-  description: Scalars['String'];
-  category: CategoryType;
-  brand?: Maybe<Scalars['String']>;
-  createdDate: Scalars['Date'];
-  slug: Scalars['String'];
-  weight: Scalars['Decimal'];
-  baseproductPtr: ProductType;
-  variants?: Maybe<Array<Maybe<WheelVariantType>>>;
-  lowestVariantPrice?: Maybe<Scalars['Decimal']>;
-  hasDifferentVariantPricing?: Maybe<Scalars['Boolean']>;
+  height: Scalars['Int'];
+  width: Scalars['Int'];
+  rimCircumference: Scalars['Int'];
 };
 
 export type WheelVariantType = {
@@ -184,26 +134,52 @@ export type CategoryFragmentFragment = (
   & Pick<CategoryType, 'id' | 'name' | 'description' | 'thumbnail'>
 );
 
-export type GetAllProductsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAllProductsQuery = (
-  { __typename?: 'Query' }
-  & { getAllProducts?: Maybe<Array<Maybe<(
-    { __typename?: 'WheelProductType' }
-    & Pick<WheelProductType, 'name' | 'lowestVariantPrice' | 'brand'>
-    & { variants?: Maybe<Array<Maybe<(
-      { __typename?: 'WheelVariantType' }
-      & Pick<WheelVariantType, 'finish' | 'boltPattern' | 'size'>
-    )>>> }
+export type ProductFragmentFragment = (
+  { __typename?: 'ProductType' }
+  & Pick<ProductType, 'name' | 'id' | 'image' | 'description' | 'createdDate' | 'slug' | 'weight' | 'brand' | 'lowestVariantPrice' | 'hasDifferentVariantPricing'>
+  & { category?: Maybe<(
+    { __typename?: 'CategoryType' }
+    & CategoryFragmentFragment
+  )>, variants?: Maybe<Array<Maybe<(
+    { __typename?: 'WheelVariantType' }
+    & WheelVariantFragmentFragment
   ) | (
-    { __typename?: 'TireProductType' }
-    & Pick<TireProductType, 'name' | 'lowestVariantPrice' | 'id' | 'brand'>
-    & { variants?: Maybe<Array<Maybe<(
-      { __typename?: 'TireVariantType' }
-      & Pick<TireVariantType, 'width' | 'productCode' | 'unitPrice' | 'rimCircumference' | 'height'>
-    )>>> }
+    { __typename?: 'TireVariantType' }
+    & TireVariantFragmentFragment
   )>>> }
+);
+
+export type ProductTileFragmentFragment = (
+  { __typename?: 'ProductType' }
+  & Pick<ProductType, 'name' | 'id' | 'description' | 'brand' | 'hasDifferentVariantPricing' | 'lowestVariantPrice'>
+);
+
+export type WheelVariantFragmentFragment = (
+  { __typename?: 'WheelVariantType' }
+  & Pick<WheelVariantType, 'id' | 'productCode' | 'stock' | 'unitPrice' | 'size' | 'boltPattern' | 'finish'>
+);
+
+export type TireVariantFragmentFragment = (
+  { __typename?: 'TireVariantType' }
+  & Pick<TireVariantType, 'id' | 'productCode' | 'stock' | 'unitPrice' | 'height' | 'width' | 'rimCircumference'>
+);
+
+export type GetAllProductTilesQueryVariables = Exact<{
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+}>;
+
+
+export type GetAllProductTilesQuery = (
+  { __typename?: 'Query' }
+  & { getAllPaginatedProducts?: Maybe<(
+    { __typename?: 'PaginatedProductsType' }
+    & Pick<PaginatedProductsType, 'hasMore'>
+    & { results?: Maybe<Array<Maybe<(
+      { __typename?: 'ProductType' }
+      & ProductTileFragmentFragment
+    )>>> }
+  )> }
 );
 
 export const CategoryFragmentFragmentDoc = gql`
@@ -214,60 +190,98 @@ export const CategoryFragmentFragmentDoc = gql`
   thumbnail
 }
     `;
-export const GetAllProductsDocument = gql`
-    query getAllProducts {
-  getAllProducts {
-    ... on TireProductType {
-      name
-      lowestVariantPrice
-      id
-      brand
-      variants {
-        width
-        productCode
-        unitPrice
-        rimCircumference
-        height
-      }
-    }
-    ... on WheelProductType {
-      name
-      lowestVariantPrice
-      brand
-      variants {
-        finish
-        boltPattern
-        size
-      }
+export const WheelVariantFragmentFragmentDoc = gql`
+    fragment WheelVariantFragment on WheelVariantType {
+  id
+  productCode
+  stock
+  unitPrice
+  size
+  boltPattern
+  finish
+}
+    `;
+export const TireVariantFragmentFragmentDoc = gql`
+    fragment TireVariantFragment on TireVariantType {
+  id
+  productCode
+  stock
+  unitPrice
+  height
+  width
+  rimCircumference
+}
+    `;
+export const ProductFragmentFragmentDoc = gql`
+    fragment ProductFragment on ProductType {
+  name
+  id
+  image
+  description
+  category {
+    ...CategoryFragment
+  }
+  createdDate
+  slug
+  weight
+  variants {
+    ...WheelVariantFragment
+    ...TireVariantFragment
+  }
+  brand
+  lowestVariantPrice
+  hasDifferentVariantPricing
+}
+    ${CategoryFragmentFragmentDoc}
+${WheelVariantFragmentFragmentDoc}
+${TireVariantFragmentFragmentDoc}`;
+export const ProductTileFragmentFragmentDoc = gql`
+    fragment ProductTileFragment on ProductType {
+  name
+  id
+  description
+  brand
+  hasDifferentVariantPricing
+  lowestVariantPrice
+}
+    `;
+export const GetAllProductTilesDocument = gql`
+    query getAllProductTiles($offset: Int!, $limit: Int!) {
+  getAllPaginatedProducts(offset: $offset, limit: $limit) {
+    hasMore
+    results {
+      ...ProductTileFragment
     }
   }
 }
-    `;
+    ${ProductTileFragmentFragmentDoc}`;
 
 /**
- * __useGetAllProductsQuery__
+ * __useGetAllProductTilesQuery__
  *
- * To run a query within a React component, call `useGetAllProductsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllProductTilesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllProductTilesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllProductsQuery({
+ * const { data, loading, error } = useGetAllProductTilesQuery({
  *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
-export function useGetAllProductsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllProductsQuery, GetAllProductsQueryVariables>) {
-        return Apollo.useQuery<GetAllProductsQuery, GetAllProductsQueryVariables>(GetAllProductsDocument, baseOptions);
+export function useGetAllProductTilesQuery(baseOptions: Apollo.QueryHookOptions<GetAllProductTilesQuery, GetAllProductTilesQueryVariables>) {
+        return Apollo.useQuery<GetAllProductTilesQuery, GetAllProductTilesQueryVariables>(GetAllProductTilesDocument, baseOptions);
       }
-export function useGetAllProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllProductsQuery, GetAllProductsQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllProductsQuery, GetAllProductsQueryVariables>(GetAllProductsDocument, baseOptions);
+export function useGetAllProductTilesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllProductTilesQuery, GetAllProductTilesQueryVariables>) {
+          return Apollo.useLazyQuery<GetAllProductTilesQuery, GetAllProductTilesQueryVariables>(GetAllProductTilesDocument, baseOptions);
         }
-export type GetAllProductsQueryHookResult = ReturnType<typeof useGetAllProductsQuery>;
-export type GetAllProductsLazyQueryHookResult = ReturnType<typeof useGetAllProductsLazyQuery>;
-export type GetAllProductsQueryResult = Apollo.QueryResult<GetAllProductsQuery, GetAllProductsQueryVariables>;
+export type GetAllProductTilesQueryHookResult = ReturnType<typeof useGetAllProductTilesQuery>;
+export type GetAllProductTilesLazyQueryHookResult = ReturnType<typeof useGetAllProductTilesLazyQuery>;
+export type GetAllProductTilesQueryResult = Apollo.QueryResult<GetAllProductTilesQuery, GetAllProductTilesQueryVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
@@ -276,9 +290,9 @@ export type GetAllProductsQueryResult = Apollo.QueryResult<GetAllProductsQuery, 
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
-    "AllProductType": [
-      "WheelProductType",
-      "TireProductType"
+    "AllVariantsType": [
+      "WheelVariantType",
+      "TireVariantType"
     ]
   }
 };

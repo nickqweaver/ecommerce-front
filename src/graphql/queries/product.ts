@@ -1,31 +1,14 @@
 import { gql } from "@apollo/client";
+import { ProductTileFragment } from "../fragments/product";
 
-export const GET_ALL_PRODUCT = gql`
-  query getAllProducts {
-    getAllProducts {
-      ... on TireProductType {
-        name
-        lowestVariantPrice
-        id
-        brand
-        variants {
-          width
-          productCode
-          unitPrice
-          rimCircumference
-          height
-        }
-      }
-      ... on WheelProductType {
-        name
-        lowestVariantPrice
-        brand
-        variants {
-          finish
-          boltPattern
-          size
-        }
+export const GET_ALL_PRODUCT_TILES = gql`
+  query getAllProductTiles($offset: Int!, $limit: Int!) {
+    getAllPaginatedProducts(offset: $offset, limit: $limit) {
+      hasMore
+      results {
+        ...ProductTileFragment
       }
     }
   }
+  ${ProductTileFragment}
 `;
