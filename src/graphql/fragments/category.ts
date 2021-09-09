@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const CategoryFragment = gql`
-  fragment CategoryFragment on CategoryType {
+export const Category = gql`
+  fragment Category on CategoryType {
     id
     name
     description

@@ -14,3 +14,4 @@ generates:
     config:
       withHooks: true
       apolloClientVersion: 3
+      useExplicitTyping: true

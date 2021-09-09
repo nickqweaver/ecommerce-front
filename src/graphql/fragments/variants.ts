@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const WheelVariantFragment = gql`
-  fragment WheelVariantFragment on WheelVariantType {
+export const WheelVariant = gql`
+  fragment WheelVariant on WheelVariantType {
     id
     productCode
     stock
@@ -12,8 +12,8 @@ export const WheelVariantFragment = gql`
   }
 `;
 
-export const TireVariantFragment = gql`
-  fragment TireVariantFragment on TireVariantType {
+export const TireVariant = gql`
+  fragment TireVariant on TireVariantType {
     id
     productCode
     stock

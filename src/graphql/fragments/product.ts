@@ -1,39 +1,40 @@
-import { gql } from "@apollo/client";
-import { WheelVariantFragment, TireVariantFragment } from "./variants";
-import { CategoryFragment } from "./category";
+import { gql } from "@apollo/client"
+import { WheelVariant, TireVariant } from "./variants"
+import { Category } from "./category"
 
-export const ProductFragment = gql`
-  fragment ProductFragment on ProductType {
+export const Product = gql`
+  fragment Product on ProductType {
     name
     id
     image
     description
     category {
-      ...CategoryFragment
+      ...Category
     }
     createdDate
     slug
     weight
     variants {
-      ...WheelVariantFragment
-      ...TireVariantFragment
+      ...WheelVariant
+      ...TireVariant
     }
     brand
     lowestVariantPrice
     hasDifferentVariantPricing
   }
-  ${WheelVariantFragment}
-  ${TireVariantFragment}
-  ${CategoryFragment}
-`;
+  ${WheelVariant}
+  ${TireVariant}
+  ${Category}
+`
 
-export const ProductTileFragment = gql`
-  fragment ProductTileFragment on ProductType {
+export const ProductTile = gql`
+  fragment ProductTile on ProductType {
     name
     id
     description
     brand
     hasDifferentVariantPricing
     lowestVariantPrice
+    image
   }
-`;
+`

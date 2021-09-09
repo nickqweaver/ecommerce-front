@@ -129,37 +129,37 @@ export type WheelVariantType = {
   finish: Scalars['String'];
 };
 
-export type CategoryFragmentFragment = (
+export type CategoryFragment = (
   { __typename?: 'CategoryType' }
   & Pick<CategoryType, 'id' | 'name' | 'description' | 'thumbnail'>
 );
 
-export type ProductFragmentFragment = (
+export type ProductFragment = (
   { __typename?: 'ProductType' }
   & Pick<ProductType, 'name' | 'id' | 'image' | 'description' | 'createdDate' | 'slug' | 'weight' | 'brand' | 'lowestVariantPrice' | 'hasDifferentVariantPricing'>
   & { category?: Maybe<(
     { __typename?: 'CategoryType' }
-    & CategoryFragmentFragment
+    & CategoryFragment
   )>, variants?: Maybe<Array<Maybe<(
     { __typename?: 'WheelVariantType' }
-    & WheelVariantFragmentFragment
+    & WheelVariantFragment
   ) | (
     { __typename?: 'TireVariantType' }
-    & TireVariantFragmentFragment
+    & TireVariantFragment
   )>>> }
 );
 
-export type ProductTileFragmentFragment = (
+export type ProductTileFragment = (
   { __typename?: 'ProductType' }
-  & Pick<ProductType, 'name' | 'id' | 'description' | 'brand' | 'hasDifferentVariantPricing' | 'lowestVariantPrice'>
+  & Pick<ProductType, 'name' | 'id' | 'description' | 'brand' | 'hasDifferentVariantPricing' | 'lowestVariantPrice' | 'image'>
 );
 
-export type WheelVariantFragmentFragment = (
+export type WheelVariantFragment = (
   { __typename?: 'WheelVariantType' }
   & Pick<WheelVariantType, 'id' | 'productCode' | 'stock' | 'unitPrice' | 'size' | 'boltPattern' | 'finish'>
 );
 
-export type TireVariantFragmentFragment = (
+export type TireVariantFragment = (
   { __typename?: 'TireVariantType' }
   & Pick<TireVariantType, 'id' | 'productCode' | 'stock' | 'unitPrice' | 'height' | 'width' | 'rimCircumference'>
 );
@@ -177,21 +177,21 @@ export type GetAllProductTilesQuery = (
     & Pick<PaginatedProductsType, 'hasMore'>
     & { results?: Maybe<Array<Maybe<(
       { __typename?: 'ProductType' }
-      & ProductTileFragmentFragment
+      & ProductTileFragment
     )>>> }
   )> }
 );
 
-export const CategoryFragmentFragmentDoc = gql`
-    fragment CategoryFragment on CategoryType {
+export const CategoryFragmentDoc = gql`
+    fragment Category on CategoryType {
   id
   name
   description
   thumbnail
 }
     `;
-export const WheelVariantFragmentFragmentDoc = gql`
-    fragment WheelVariantFragment on WheelVariantType {
+export const WheelVariantFragmentDoc = gql`
+    fragment WheelVariant on WheelVariantType {
   id
   productCode
   stock
@@ -201,8 +201,8 @@ export const WheelVariantFragmentFragmentDoc = gql`
   finish
 }
     `;
-export const TireVariantFragmentFragmentDoc = gql`
-    fragment TireVariantFragment on TireVariantType {
+export const TireVariantFragmentDoc = gql`
+    fragment TireVariant on TireVariantType {
   id
   productCode
   stock
@@ -212,37 +212,38 @@ export const TireVariantFragmentFragmentDoc = gql`
   rimCircumference
 }
     `;
-export const ProductFragmentFragmentDoc = gql`
-    fragment ProductFragment on ProductType {
+export const ProductFragmentDoc = gql`
+    fragment Product on ProductType {
   name
   id
   image
   description
   category {
-    ...CategoryFragment
+    ...Category
   }
   createdDate
   slug
   weight
   variants {
-    ...WheelVariantFragment
-    ...TireVariantFragment
+    ...WheelVariant
+    ...TireVariant
   }
   brand
   lowestVariantPrice
   hasDifferentVariantPricing
 }
-    ${CategoryFragmentFragmentDoc}
-${WheelVariantFragmentFragmentDoc}
-${TireVariantFragmentFragmentDoc}`;
-export const ProductTileFragmentFragmentDoc = gql`
-    fragment ProductTileFragment on ProductType {
+    ${CategoryFragmentDoc}
+${WheelVariantFragmentDoc}
+${TireVariantFragmentDoc}`;
+export const ProductTileFragmentDoc = gql`
+    fragment ProductTile on ProductType {
   name
   id
   description
   brand
   hasDifferentVariantPricing
   lowestVariantPrice
+  image
 }
     `;
 export const GetAllProductTilesDocument = gql`
@@ -250,11 +251,11 @@ export const GetAllProductTilesDocument = gql`
   getAllPaginatedProducts(offset: $offset, limit: $limit) {
     hasMore
     results {
-      ...ProductTileFragment
+      ...ProductTile
     }
   }
 }
-    ${ProductTileFragmentFragmentDoc}`;
+    ${ProductTileFragmentDoc}`;
 
 /**
  * __useGetAllProductTilesQuery__
@@ -283,11 +284,14 @@ export type GetAllProductTilesQueryHookResult = ReturnType<typeof useGetAllProdu
 export type GetAllProductTilesLazyQueryHookResult = ReturnType<typeof useGetAllProductTilesLazyQuery>;
 export type GetAllProductTilesQueryResult = Apollo.QueryResult<GetAllProductTilesQuery, GetAllProductTilesQueryVariables>;
 
-      export interface PossibleTypesResultData {
-        possibleTypes: {
-          [key: string]: string[]
-        }
-      }
+      export type PossibleTypesResultData = {
+  "possibleTypes": {
+    "AllVariantsType": [
+      "WheelVariantType",
+      "TireVariantType"
+    ]
+  }
+};
       const result: PossibleTypesResultData = {
   "possibleTypes": {
     "AllVariantsType": [
