@@ -27,7 +27,6 @@ export type BaseProductType = {
   __typename?: 'BaseProductType';
   id: Scalars['ID'];
   name: Scalars['String'];
-  image: Scalars['String'];
   description: Scalars['String'];
   category: CategoryType;
   createdDate: Scalars['Date'];
@@ -39,9 +38,15 @@ export type CategoryType = {
   __typename?: 'CategoryType';
   id: Scalars['ID'];
   name: Scalars['String'];
-  description: Scalars['String'];
-  thumbnail: Scalars['String'];
   products: Array<BaseProductType>;
+};
+
+export type CloudinaryImageType = {
+  __typename?: 'CloudinaryImageType';
+  id?: Maybe<Scalars['String']>;
+  format?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 
@@ -62,7 +67,7 @@ export type ProductType = {
   __typename?: 'ProductType';
   name?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
-  image?: Maybe<Scalars['String']>;
+  image?: Maybe<CloudinaryImageType>;
   description?: Maybe<Scalars['String']>;
   category?: Maybe<CategoryType>;
   createdDate?: Maybe<Scalars['Date']>;
@@ -131,13 +136,21 @@ export type WheelVariantType = {
 
 export type CategoryFragment = (
   { __typename?: 'CategoryType' }
-  & Pick<CategoryType, 'id' | 'name' | 'description' | 'thumbnail'>
+  & Pick<CategoryType, 'id' | 'name'>
+);
+
+export type ImageFragment = (
+  { __typename?: 'CloudinaryImageType' }
+  & Pick<CloudinaryImageType, 'url' | 'type' | 'format' | 'id'>
 );
 
 export type ProductFragment = (
   { __typename?: 'ProductType' }
-  & Pick<ProductType, 'name' | 'id' | 'image' | 'description' | 'createdDate' | 'slug' | 'weight' | 'brand' | 'lowestVariantPrice' | 'hasDifferentVariantPricing'>
-  & { category?: Maybe<(
+  & Pick<ProductType, 'name' | 'id' | 'description' | 'createdDate' | 'slug' | 'weight' | 'brand' | 'lowestVariantPrice' | 'hasDifferentVariantPricing'>
+  & { image?: Maybe<(
+    { __typename?: 'CloudinaryImageType' }
+    & ImageFragment
+  )>, category?: Maybe<(
     { __typename?: 'CategoryType' }
     & CategoryFragment
   )>, variants?: Maybe<Array<Maybe<(
@@ -151,7 +164,11 @@ export type ProductFragment = (
 
 export type ProductTileFragment = (
   { __typename?: 'ProductType' }
-  & Pick<ProductType, 'name' | 'id' | 'description' | 'brand' | 'hasDifferentVariantPricing' | 'lowestVariantPrice' | 'image'>
+  & Pick<ProductType, 'name' | 'id' | 'description' | 'brand' | 'hasDifferentVariantPricing' | 'lowestVariantPrice'>
+  & { image?: Maybe<(
+    { __typename?: 'CloudinaryImageType' }
+    & ImageFragment
+  )> }
 );
 
 export type WheelVariantFragment = (
@@ -182,12 +199,18 @@ export type GetAllProductTilesQuery = (
   )> }
 );
 
+export const ImageFragmentDoc = gql`
+    fragment Image on CloudinaryImageType {
+  url
+  type
+  format
+  id
+}
+    `;
 export const CategoryFragmentDoc = gql`
     fragment Category on CategoryType {
   id
   name
-  description
-  thumbnail
 }
     `;
 export const WheelVariantFragmentDoc = gql`
@@ -216,7 +239,9 @@ export const ProductFragmentDoc = gql`
     fragment Product on ProductType {
   name
   id
-  image
+  image {
+    ...Image
+  }
   description
   category {
     ...Category
@@ -232,7 +257,8 @@ export const ProductFragmentDoc = gql`
   lowestVariantPrice
   hasDifferentVariantPricing
 }
-    ${CategoryFragmentDoc}
+    ${ImageFragmentDoc}
+${CategoryFragmentDoc}
 ${WheelVariantFragmentDoc}
 ${TireVariantFragmentDoc}`;
 export const ProductTileFragmentDoc = gql`
@@ -243,9 +269,11 @@ export const ProductTileFragmentDoc = gql`
   brand
   hasDifferentVariantPricing
   lowestVariantPrice
-  image
+  image {
+    ...Image
+  }
 }
-    `;
+    ${ImageFragmentDoc}`;
 export const GetAllProductTilesDocument = gql`
     query getAllProductTiles($offset: Int!, $limit: Int!) {
   getAllPaginatedProducts(offset: $offset, limit: $limit) {

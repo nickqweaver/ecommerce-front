@@ -1,12 +1,15 @@
 import { gql } from "@apollo/client"
 import { WheelVariant, TireVariant } from "./variants"
 import { Category } from "./category"
+import { Image } from "./image"
 
 export const Product = gql`
   fragment Product on ProductType {
     name
     id
-    image
+    image {
+      ...Image
+    }
     description
     category {
       ...Category
@@ -25,6 +28,7 @@ export const Product = gql`
   ${WheelVariant}
   ${TireVariant}
   ${Category}
+  ${Image}
 `
 
 export const ProductTile = gql`
@@ -35,6 +39,9 @@ export const ProductTile = gql`
     brand
     hasDifferentVariantPricing
     lowestVariantPrice
-    image
+    image {
+      ...Image
+    }
   }
+  ${Image}
 `

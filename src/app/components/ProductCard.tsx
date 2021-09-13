@@ -1,7 +1,6 @@
 import React from "react"
 import { ProductTileFragment } from "../../graphql/generated/types"
 import styled from "styled-components"
-import { resolveImageUrl } from "../../utils/resolveImageUrl"
 
 const Card = styled.div`
   padding: 32px 16px;
@@ -26,7 +25,7 @@ export function ProductCard(props: ProductTileFragment) {
     : `${props.lowestVariantPrice}`
   return (
     <Card>
-      <Image src={resolveImageUrl(props.image ?? "")} />
+      <Image src={props?.image?.url ?? ""} />
       <span>{props.name}</span>
       <span>{price}</span>
       <Button as="a">Details</Button>

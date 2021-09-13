@@ -7,7 +7,6 @@ interface ProductsProps {
 }
 export function Products(props: ProductsProps) {
   const { products } = props
-  console.log(products)
   return (
     <div>
       {products.map((product) => (
