@@ -6,12 +6,16 @@ const Card = styled.div`
   padding: 32px 16px;
   background-color: #fff;
   border: 2px solid black;
+  display: flex;
 `
 
 const Button = styled.button`
   padding: 8px 24px;
   border: none;
   background-color: orange;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
 `
 
 const Image = styled.img`
@@ -19,17 +23,26 @@ const Image = styled.img`
   height: 200px;
 `
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+  height: 100%;
+`
+
 export function ProductCard(props: ProductTileFragment) {
   const price = props.hasDifferentVariantPricing
-    ? `From ${props.lowestVariantPrice}`
-    : `${props.lowestVariantPrice}`
+    ? `From $${props.lowestVariantPrice}`
+    : `$${props.lowestVariantPrice}`
   return (
     <Card>
       <Image src={props?.image?.url ?? ""} />
-      <span>{props.name}</span>
-      <span>{price}</span>
-      <Button as="a">Details</Button>
-      <span>{props.brand}</span>
+      <Container>
+        <span>{props.name}</span>
+        <span>{price}</span>
+        <span>{props.brand}</span>
+        <Button as="a">Details</Button>
+      </Container>
     </Card>
   )
 }
