@@ -84,6 +84,7 @@ export type Query = {
   getAllProducts?: Maybe<Array<Maybe<ProductType>>>;
   getProductById?: Maybe<ProductType>;
   getAllPaginatedProducts?: Maybe<PaginatedProductsType>;
+  getProductBySlug?: Maybe<ProductType>;
   getAllCategories?: Maybe<Array<Maybe<CategoryType>>>;
   getProductIdsFromCategory?: Maybe<Array<Maybe<Scalars['ID']>>>;
   getPaginatedProductIdsFromCategory?: Maybe<PaginatedProductIdsType>;
@@ -98,6 +99,11 @@ export type QueryGetProductByIdArgs = {
 export type QueryGetAllPaginatedProductsArgs = {
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryGetProductBySlugArgs = {
+  slug?: Maybe<Scalars['String']>;
 };
 
 
@@ -164,7 +170,7 @@ export type ProductFragment = (
 
 export type ProductTileFragment = (
   { __typename?: 'ProductType' }
-  & Pick<ProductType, 'name' | 'id' | 'description' | 'brand' | 'hasDifferentVariantPricing' | 'lowestVariantPrice'>
+  & Pick<ProductType, 'name' | 'id' | 'description' | 'brand' | 'hasDifferentVariantPricing' | 'lowestVariantPrice' | 'slug'>
   & { image?: Maybe<(
     { __typename?: 'CloudinaryImageType' }
     & ImageFragment
@@ -196,6 +202,19 @@ export type GetAllProductTilesQuery = (
       { __typename?: 'ProductType' }
       & ProductTileFragment
     )>>> }
+  )> }
+);
+
+export type GetProductBySlugQueryVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+
+export type GetProductBySlugQuery = (
+  { __typename?: 'Query' }
+  & { getProductBySlug?: Maybe<(
+    { __typename?: 'ProductType' }
+    & ProductFragment
   )> }
 );
 
@@ -272,6 +291,7 @@ export const ProductTileFragmentDoc = gql`
   image {
     ...Image
   }
+  slug
 }
     ${ImageFragmentDoc}`;
 export const GetAllProductTilesDocument = gql`
@@ -311,6 +331,39 @@ export function useGetAllProductTilesLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetAllProductTilesQueryHookResult = ReturnType<typeof useGetAllProductTilesQuery>;
 export type GetAllProductTilesLazyQueryHookResult = ReturnType<typeof useGetAllProductTilesLazyQuery>;
 export type GetAllProductTilesQueryResult = Apollo.QueryResult<GetAllProductTilesQuery, GetAllProductTilesQueryVariables>;
+export const GetProductBySlugDocument = gql`
+    query getProductBySlug($slug: String!) {
+  getProductBySlug(slug: $slug) {
+    ...Product
+  }
+}
+    ${ProductFragmentDoc}`;
+
+/**
+ * __useGetProductBySlugQuery__
+ *
+ * To run a query within a React component, call `useGetProductBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductBySlugQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetProductBySlugQuery(baseOptions: Apollo.QueryHookOptions<GetProductBySlugQuery, GetProductBySlugQueryVariables>) {
+        return Apollo.useQuery<GetProductBySlugQuery, GetProductBySlugQueryVariables>(GetProductBySlugDocument, baseOptions);
+      }
+export function useGetProductBySlugLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductBySlugQuery, GetProductBySlugQueryVariables>) {
+          return Apollo.useLazyQuery<GetProductBySlugQuery, GetProductBySlugQueryVariables>(GetProductBySlugDocument, baseOptions);
+        }
+export type GetProductBySlugQueryHookResult = ReturnType<typeof useGetProductBySlugQuery>;
+export type GetProductBySlugLazyQueryHookResult = ReturnType<typeof useGetProductBySlugLazyQuery>;
+export type GetProductBySlugQueryResult = Apollo.QueryResult<GetProductBySlugQuery, GetProductBySlugQueryVariables>;
 
       export type PossibleTypesResultData = {
   "possibleTypes": {

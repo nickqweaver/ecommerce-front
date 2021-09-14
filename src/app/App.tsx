@@ -1,23 +1,21 @@
 import React from "react"
-import {
-  ProductType,
-  useGetAllProductTilesQuery,
-} from "../graphql/generated/types"
-import { Products } from "./templates/Products"
+import { Products } from "./pages/Products"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { Product } from "./templates/Product"
 
 function App() {
-  const { data, loading: isLoading, error } = useGetAllProductTilesQuery({
-    variables: { offset: 0, limit: 1 },
-    errorPolicy: "all", // TODO change this after index issue is fixed, error getting thrown but data still accessible
-  })
-
-  if (data?.getAllPaginatedProducts?.results)
-    return (
-      <Products
-        products={data?.getAllPaginatedProducts?.results as ProductType[]}
-      />
-    )
-  else return <div>No Products</div>
+  return (
+    <Router>
+      <Switch>
+        <Route path="/products/:slug">
+          <Product />
+        </Route>
+        <Route path="/products">
+          <Products />
+        </Route>
+      </Switch>
+    </Router>
+  )
 }
 
 export default App

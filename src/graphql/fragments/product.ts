@@ -42,6 +42,7 @@ export const ProductTile = gql`
     image {
       ...Image
     }
+    slug
   }
   ${Image}
 `

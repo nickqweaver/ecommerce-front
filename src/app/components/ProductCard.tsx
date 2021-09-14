@@ -1,5 +1,6 @@
 import React from "react"
 import { ProductTileFragment } from "../../graphql/generated/types"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 const Card = styled.div`
@@ -41,7 +42,9 @@ export function ProductCard(props: ProductTileFragment) {
         <span>{props.name}</span>
         <span>{price}</span>
         <span>{props.brand}</span>
-        <Button as="a">Details</Button>
+        <Link to={`/products/${props.slug}`}>
+          <Button as="a">Details</Button>
+        </Link>
       </Container>
     </Card>
   )
