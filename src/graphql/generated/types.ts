@@ -43,10 +43,10 @@ export type CategoryType = {
 
 export type CloudinaryImageType = {
   __typename?: 'CloudinaryImageType';
-  id?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
   format?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
+  url: Scalars['String'];
 };
 
 
@@ -54,29 +54,29 @@ export type CloudinaryImageType = {
 export type PaginatedProductIdsType = {
   __typename?: 'PaginatedProductIdsType';
   hasMore?: Maybe<Scalars['Boolean']>;
-  results?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  results?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type PaginatedProductsType = {
   __typename?: 'PaginatedProductsType';
   hasMore?: Maybe<Scalars['Boolean']>;
-  results?: Maybe<Array<Maybe<ProductType>>>;
+  results?: Maybe<Array<ProductType>>;
 };
 
 export type ProductType = {
   __typename?: 'ProductType';
-  name?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
-  image?: Maybe<CloudinaryImageType>;
-  description?: Maybe<Scalars['String']>;
-  category?: Maybe<CategoryType>;
-  createdDate?: Maybe<Scalars['Date']>;
-  slug?: Maybe<Scalars['String']>;
-  weight?: Maybe<Scalars['Decimal']>;
-  variants?: Maybe<Array<Maybe<AllVariantsType>>>;
-  brand?: Maybe<Scalars['String']>;
-  lowestVariantPrice?: Maybe<Scalars['Decimal']>;
-  hasDifferentVariantPricing?: Maybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  id: Scalars['ID'];
+  image: CloudinaryImageType;
+  description: Scalars['String'];
+  category: CategoryType;
+  createdDate: Scalars['Date'];
+  slug: Scalars['String'];
+  weight: Scalars['Decimal'];
+  variants: Array<AllVariantsType>;
+  brand: Scalars['String'];
+  lowestVariantPrice: Scalars['Decimal'];
+  hasDifferentVariantPricing: Scalars['Boolean'];
 };
 
 export type Query = {
@@ -153,28 +153,28 @@ export type ImageFragment = (
 export type ProductFragment = (
   { __typename?: 'ProductType' }
   & Pick<ProductType, 'name' | 'id' | 'description' | 'createdDate' | 'slug' | 'weight' | 'brand' | 'lowestVariantPrice' | 'hasDifferentVariantPricing'>
-  & { image?: Maybe<(
+  & { image: (
     { __typename?: 'CloudinaryImageType' }
     & ImageFragment
-  )>, category?: Maybe<(
+  ), category: (
     { __typename?: 'CategoryType' }
     & CategoryFragment
-  )>, variants?: Maybe<Array<Maybe<(
+  ), variants: Array<(
     { __typename?: 'WheelVariantType' }
     & WheelVariantFragment
   ) | (
     { __typename?: 'TireVariantType' }
     & TireVariantFragment
-  )>>> }
+  )> }
 );
 
 export type ProductTileFragment = (
   { __typename?: 'ProductType' }
   & Pick<ProductType, 'name' | 'id' | 'description' | 'brand' | 'hasDifferentVariantPricing' | 'lowestVariantPrice' | 'slug'>
-  & { image?: Maybe<(
+  & { image: (
     { __typename?: 'CloudinaryImageType' }
     & ImageFragment
-  )> }
+  ) }
 );
 
 export type WheelVariantFragment = (
@@ -198,10 +198,10 @@ export type GetAllProductTilesQuery = (
   & { getAllPaginatedProducts?: Maybe<(
     { __typename?: 'PaginatedProductsType' }
     & Pick<PaginatedProductsType, 'hasMore'>
-    & { results?: Maybe<Array<Maybe<(
+    & { results?: Maybe<Array<(
       { __typename?: 'ProductType' }
       & ProductTileFragment
-    )>>> }
+    )>> }
   )> }
 );
 
