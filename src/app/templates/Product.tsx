@@ -1,7 +1,10 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
-import { useGetProductBySlugQuery } from "src/graphql/generated/types"
+import {
+  useGetProductBySlugQuery,
+  useGetVariantByIdLazyQuery,
+} from "src/graphql/generated/types"
 import { Variants } from "../components/Variants"
 import { getVariantLabels } from "../utils/variantHelpers"
 
@@ -12,6 +15,10 @@ const Image = styled.img`
 
 export function Product() {
   let { slug } = useParams<{ slug: string }>()
+  const [activeVariantId, setActiveVariantId] = React.useState<string | null>(
+    null
+  )
+
   const {
     data,
     loading: isLoading,
@@ -20,8 +27,17 @@ export function Product() {
     variables: { slug },
   })
 
+  const [getActiveVariant, { data: activeVariantData }] =
+    useGetVariantByIdLazyQuery()
+  const productId = data?.getProductBySlug?.id
   const variants = data?.getProductBySlug?.variants
   const description = data?.getProductBySlug?.description
+
+  React.useEffect(() => {
+    if (productId && activeVariantId) {
+      getActiveVariant({ variables: { productId, variantId: activeVariantId } })
+    }
+  }, [activeVariantId, getActiveVariant, productId])
 
   // Query by slug to get product info
   if (isLoading) {
@@ -37,7 +53,12 @@ export function Product() {
         src={data?.getProductBySlug?.image.url}
         alt={data?.getProductBySlug?.name}
       />
-      {variants && <Variants variants={variants} />}
+      <p>{activeVariantData?.getVariantById?.unitPrice}</p>
+      <p>{activeVariantData?.getVariantById?.productCode}</p>
+      <p>{activeVariantData?.getVariantById?.stock} Left</p>
+      {variants && (
+        <Variants variants={variants} setActiveVariantId={setActiveVariantId} />
+      )}
       {description && (
         <div
           dangerouslySetInnerHTML={{

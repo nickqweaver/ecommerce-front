@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from "@apollo/client"
 
 export const WheelVariant = gql`
   fragment WheelVariant on WheelVariantType {
@@ -8,9 +8,8 @@ export const WheelVariant = gql`
     unitPrice
     size
     boltPattern
-    finish
   }
-`;
+`
 
 export const TireVariant = gql`
   fragment TireVariant on TireVariantType {
@@ -22,4 +21,4 @@ export const TireVariant = gql`
     width
     rimCircumference
   }
-`;
+`

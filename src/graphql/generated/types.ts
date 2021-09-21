@@ -81,6 +81,7 @@ export type ProductType = {
 
 export type Query = {
   __typename?: 'Query';
+  getVariantById?: Maybe<AllVariantsType>;
   getAllProducts?: Maybe<Array<Maybe<ProductType>>>;
   getProductById?: Maybe<ProductType>;
   getAllPaginatedProducts?: Maybe<PaginatedProductsType>;
@@ -88,6 +89,12 @@ export type Query = {
   getAllCategories?: Maybe<Array<Maybe<CategoryType>>>;
   getProductIdsFromCategory?: Maybe<Array<Maybe<Scalars['ID']>>>;
   getPaginatedProductIdsFromCategory?: Maybe<PaginatedProductIdsType>;
+};
+
+
+export type QueryGetVariantByIdArgs = {
+  productId?: Maybe<Scalars['ID']>;
+  variantId?: Maybe<Scalars['ID']>;
 };
 
 
@@ -137,7 +144,6 @@ export type WheelVariantType = {
   unitPrice: Scalars['Decimal'];
   size: Scalars['String'];
   boltPattern: Scalars['String'];
-  finish: Scalars['String'];
 };
 
 export type CategoryFragment = (
@@ -179,7 +185,7 @@ export type ProductTileFragment = (
 
 export type WheelVariantFragment = (
   { __typename?: 'WheelVariantType' }
-  & Pick<WheelVariantType, 'id' | 'productCode' | 'stock' | 'unitPrice' | 'size' | 'boltPattern' | 'finish'>
+  & Pick<WheelVariantType, 'id' | 'productCode' | 'stock' | 'unitPrice' | 'size' | 'boltPattern'>
 );
 
 export type TireVariantFragment = (
@@ -218,6 +224,23 @@ export type GetProductBySlugQuery = (
   )> }
 );
 
+export type GetVariantByIdQueryVariables = Exact<{
+  productId: Scalars['ID'];
+  variantId: Scalars['ID'];
+}>;
+
+
+export type GetVariantByIdQuery = (
+  { __typename?: 'Query' }
+  & { getVariantById?: Maybe<(
+    { __typename?: 'WheelVariantType' }
+    & WheelVariantFragment
+  ) | (
+    { __typename?: 'TireVariantType' }
+    & TireVariantFragment
+  )> }
+);
+
 export const ImageFragmentDoc = gql`
     fragment Image on CloudinaryImageType {
   url
@@ -240,7 +263,6 @@ export const WheelVariantFragmentDoc = gql`
   unitPrice
   size
   boltPattern
-  finish
 }
     `;
 export const TireVariantFragmentDoc = gql`
@@ -364,6 +386,46 @@ export function useGetProductBySlugLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetProductBySlugQueryHookResult = ReturnType<typeof useGetProductBySlugQuery>;
 export type GetProductBySlugLazyQueryHookResult = ReturnType<typeof useGetProductBySlugLazyQuery>;
 export type GetProductBySlugQueryResult = Apollo.QueryResult<GetProductBySlugQuery, GetProductBySlugQueryVariables>;
+export const GetVariantByIdDocument = gql`
+    query getVariantById($productId: ID!, $variantId: ID!) {
+  getVariantById(productId: $productId, variantId: $variantId) {
+    ... on WheelVariantType {
+      ...WheelVariant
+    }
+    ... on TireVariantType {
+      ...TireVariant
+    }
+  }
+}
+    ${WheelVariantFragmentDoc}
+${TireVariantFragmentDoc}`;
+
+/**
+ * __useGetVariantByIdQuery__
+ *
+ * To run a query within a React component, call `useGetVariantByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetVariantByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetVariantByIdQuery({
+ *   variables: {
+ *      productId: // value for 'productId'
+ *      variantId: // value for 'variantId'
+ *   },
+ * });
+ */
+export function useGetVariantByIdQuery(baseOptions: Apollo.QueryHookOptions<GetVariantByIdQuery, GetVariantByIdQueryVariables>) {
+        return Apollo.useQuery<GetVariantByIdQuery, GetVariantByIdQueryVariables>(GetVariantByIdDocument, baseOptions);
+      }
+export function useGetVariantByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetVariantByIdQuery, GetVariantByIdQueryVariables>) {
+          return Apollo.useLazyQuery<GetVariantByIdQuery, GetVariantByIdQueryVariables>(GetVariantByIdDocument, baseOptions);
+        }
+export type GetVariantByIdQueryHookResult = ReturnType<typeof useGetVariantByIdQuery>;
+export type GetVariantByIdLazyQueryHookResult = ReturnType<typeof useGetVariantByIdLazyQuery>;
+export type GetVariantByIdQueryResult = Apollo.QueryResult<GetVariantByIdQuery, GetVariantByIdQueryVariables>;
 
       export type PossibleTypesResultData = {
   "possibleTypes": {

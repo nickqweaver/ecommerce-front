@@ -11,18 +11,15 @@ export const VariantSelector: FC<VariantSelectorProps> = (props) => {
   return (
     <>
       <label htmlFor={props.label}>{props.label}</label>
-      <select
-        name={props.label}
-        id={props.label}
-        defaultValue={props.options[0]}
-        onChange={(e) =>
-          props.onChange(convertToCamelCase(props.label), e.target.value)
-        }
-      >
-        {props.options.map((option) => (
-          <option value={option}>{option}</option>
-        ))}
-      </select>
+      {props.options.map((option) => (
+        <button
+          onClick={() =>
+            props.onChange(convertToCamelCase(props.label), option)
+          }
+        >
+          {option}
+        </button>
+      ))}
     </>
   )
 }
