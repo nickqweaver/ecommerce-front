@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import styled from "styled-components"
 import { useGetProductBySlugQuery } from "src/graphql/generated/types"
 import { Variants } from "../components/Variants"
+import { getVariantLabels } from "../utils/variantHelpers"
 
 const Image = styled.img`
   width: 200px;

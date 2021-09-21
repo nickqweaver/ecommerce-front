@@ -22,6 +22,16 @@ export const convertToSentenceCase = (str: string) =>
     return str.toUpperCase()
   })
 
+export const convertToCamelCase = (str: string) =>
+  str
+    .replace(/\s(.)/g, function ($1) {
+      return $1.toUpperCase()
+    })
+    .replace(/\s/g, "")
+    .replace(/^(.)/, function ($1) {
+      return $1.toLowerCase()
+    })
+
 export const getVariantOptions = (variants: AllVariantsType[]) => {
   const variantLabels = getVariantLabels(variants)
   const variantOptions = variantLabels.map((label) => {
