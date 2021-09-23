@@ -6,7 +6,6 @@ import {
   useGetVariantByIdLazyQuery,
 } from "src/graphql/generated/types"
 import { Variants } from "../components/Variants"
-import { getVariantLabels } from "../utils/variantHelpers"
 
 const Image = styled.img`
   width: 200px;
@@ -39,7 +38,6 @@ export function Product() {
     }
   }, [activeVariantId, getActiveVariant, productId])
 
-  // Query by slug to get product info
   if (isLoading) {
     return <div>Loading...</div>
   }

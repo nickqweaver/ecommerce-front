@@ -26,7 +26,7 @@ export function Variants(props: VariantProps) {
       )
       let idMatch = null
 
-      props.variants.forEach((variant) => {
+      variants.forEach((variant) => {
         const values = Object.values(variant)
         const hasMatches = selectedOptionValues.every((option) =>
           values.includes(option)
@@ -37,7 +37,7 @@ export function Variants(props: VariantProps) {
       })
       return idMatch
     },
-    [props.variants]
+    [variants]
   )
 
   React.useEffect(() => {
@@ -46,9 +46,10 @@ export function Variants(props: VariantProps) {
 
   return (
     <>
-      {getVariantOptions(props.variants).map((variantOption) => {
+      {getVariantOptions(variants).map((variantOption, index) => {
         return (
           <VariantSelector
+            key={index}
             label={variantOption.label}
             options={variantOption.options}
             onChange={handleSelectedVariantOptions}

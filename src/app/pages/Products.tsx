@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import {
-  GetAllProductTilesQuery,
   ProductTileFragment,
   useGetAllProductTilesLazyQuery,
-  useGetAllProductTilesQuery,
-  useGetVariantByIdLazyQuery,
 } from "../../graphql/generated/types"
 import { Button } from "../components/Button"
 import { FlexWrapper } from "../components/FlexWrapper"
@@ -49,10 +46,16 @@ export function Products(props: ProductsProps) {
   const [getProducts, { data, loading: isLoading, error }] =
     useGetAllProductTilesLazyQuery({
       onCompleted: (products) => {
+        console.log("we her")
         if (products.getAllPaginatedProducts?.results) {
+          console.log(
+            products.getAllPaginatedProducts.results,
+            "On Completed Results"
+          )
           setProd([...prod, ...products.getAllPaginatedProducts?.results])
         }
       },
+      fetchPolicy: "no-cache", // TODO - When clicking product details and then going back to Products page, refetching is cached and won't call onCompleted to update state. Look into how we can still use caching for this use case
     })
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export function Products(props: ProductsProps) {
   }, []) //eslint-disable-line
 
   if (error) {
-    return <div>An error occured</div>
+    return <div>An error occured</div> // TODO create Error component
   }
 
   const loadingItems = Array.from(Array(PAGINATION_INCREMENT).keys())
@@ -70,11 +73,12 @@ export function Products(props: ProductsProps) {
     <Page>
       <Grid columnSize={320} rowSize={460} gap={16} isDense>
         {prod.map((product: any) => (
-          <FlexWrapper>
-            <ProductCard key={product.id} {...product} />
+          <FlexWrapper key={product.id}>
+            <ProductCard {...product} />
           </FlexWrapper>
         ))}
-        {isLoading && loadingItems.map((_item) => <ProductCardLoader />)}
+        {isLoading &&
+          loadingItems.map((item) => <ProductCardLoader key={item} />)}
       </Grid>
       <FlexWrapper margin="64px 0px">
         <Button
