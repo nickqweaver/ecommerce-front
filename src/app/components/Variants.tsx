@@ -5,14 +5,15 @@ import { VariantSelector } from "./VariantSelector"
 
 type VariantProps = {
   variants: AllVariantsType[]
+  setActiveVariantId: (id: string | null) => void
 }
 export function Variants(props: VariantProps) {
+  const { variants, setActiveVariantId } = props
   const labels = getVariantLabels(props.variants)
   const entries = labels.map((label) => [label, null])
   const [selectedVariantOptions, setSelectedVariantOptions] = React.useState(
     Object.fromEntries(entries)
   )
-  const [activeVariantId, setActiveVariantId] = React.useState(null)
 
   const handleSelectedVariantOptions = (label: string, choice: string) => {
     setSelectedVariantOptions({ ...selectedVariantOptions, [label]: choice })
@@ -40,9 +41,8 @@ export function Variants(props: VariantProps) {
   )
 
   React.useEffect(() => {
-    console.log("FIRE")
     setActiveVariantId(getVariantId(selectedVariantOptions))
-  }, [selectedVariantOptions, getVariantId])
+  }, [selectedVariantOptions, getVariantId, setActiveVariantId])
 
   return (
     <>
