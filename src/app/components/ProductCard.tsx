@@ -38,7 +38,7 @@ const CardText = styled.div`
   flex-direction: column;
 `
 
-const Tag = styled.span<{ isBold?: boolean }>`
+const Tag = styled.span<{ isBold?: boolean; color?: string }>`
   font-weight: ${(props) => (props.isBold ? 500 : 300)};
 `
 
@@ -76,7 +76,7 @@ export function ProductCard(props: ProductTileFragment) {
             <h5 style={{ fontWeight: 500, marginTop: `calc(3rem - 16px)` }}>
               {props.name}
             </h5>
-            <Tag>{price}</Tag>
+            <Tag className="secondary-font-color">{price}</Tag>
             <Tag isBold>{props.brand}</Tag>
           </CardText>
           <ButtonWrapper>

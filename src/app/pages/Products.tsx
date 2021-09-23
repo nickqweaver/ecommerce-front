@@ -6,6 +6,8 @@ import {
   useGetVariantByIdLazyQuery,
 } from "../../graphql/generated/types"
 import { Button } from "../components/Button"
+import { FlexWrapper } from "../components/FlexWrapper"
+import { Page } from "../components/Page"
 import { ProductCard, ProductCardLoader } from "../components/ProductCard"
 
 const PAGINATION_INCREMENT = 1
@@ -33,6 +35,7 @@ const Grid = styled.div<GridProps>`
   grid-auto-rows: minmax(${(props) => props.rowSize}px, auto);
   grid-auto-flow: ${(props) => (props.isDense ? "dense" : "row")};
 `
+
 export function Products(props: ProductsProps) {
   const [pagination, setPagination] = useState({
     offset: 0,
@@ -62,31 +65,37 @@ export function Products(props: ProductsProps) {
   const loadingItems = Array.from(Array(PAGINATION_INCREMENT).keys())
 
   return (
-    <>
-      <Grid columnSize={400} rowSize={460} gap={16} isDense>
+    <Page>
+      <Grid columnSize={320} rowSize={460} gap={16} isDense>
         {prod.map((product: any) => (
-          <ProductCard key={product.id} {...product} />
+          <FlexWrapper>
+            <ProductCard key={product.id} {...product} />
+          </FlexWrapper>
         ))}
         {isLoading && loadingItems.map((_item) => <ProductCardLoader />)}
       </Grid>
-      <Button
-        onClick={() => {
-          const offset = pagination.offset + 1
-          const limit = pagination.limit + 1
-          getProducts({
-            variables: {
-              offset,
-              limit,
-            },
-          })
-          setPagination({
-            limit,
-            offset,
-          })
-        }}
-      >
-        More
-      </Button>
-    </>
+      <FlexWrapper margin="64px 0px">
+        <Button
+          onClick={() => {
+            const offset = pagination.offset + 1
+            const limit = pagination.limit + 1
+            if (data?.getAllPaginatedProducts?.hasMore) {
+              getProducts({
+                variables: {
+                  offset,
+                  limit,
+                },
+              })
+              setPagination({
+                limit,
+                offset,
+              })
+            }
+          }}
+        >
+          View More
+        </Button>
+      </FlexWrapper>
+    </Page>
   )
 }

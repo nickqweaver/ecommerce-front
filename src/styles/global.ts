@@ -36,4 +36,8 @@ h4 {font-size: 1.563rem;}
 h5 {font-size: 1.25rem;}
 
 small, .text_small {font-size: 0.8rem;}
+
+.secondary-font-color {
+  color: #9e9e9e;
+}
 `
