@@ -1,6 +1,6 @@
 import React from "react"
 import { AllVariantsType } from "src/graphql/generated/types"
-import { getVariantLabels, getVariantOptions } from "../utils/variantHelpers"
+import { getVariantLabels, getVariantOptions } from "../../utils/variantHelpers"
 import { VariantSelector } from "./VariantSelector"
 
 type VariantProps = {

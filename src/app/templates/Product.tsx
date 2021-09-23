@@ -5,12 +5,10 @@ import {
   useGetProductBySlugQuery,
   useGetVariantByIdLazyQuery,
 } from "src/graphql/generated/types"
-import { Variants } from "../components/Variants"
-
-const Image = styled.img`
-  width: 200px;
-  height: 200px;
-`
+import { Variants } from "../components/Variant/Variants"
+import { Page } from "../components/UI/Page"
+import { Image } from "../components/UI/Image"
+import { FlexWrapper } from "../components/FlexWrapper"
 
 export function Product() {
   let { slug } = useParams<{ slug: string }>()
@@ -38,32 +36,53 @@ export function Product() {
     }
   }, [activeVariantId, getActiveVariant, productId])
 
+  const imageUrl = data?.getProductBySlug?.image.url
+
+  const checkStock = (quantity: number) => {
+    if (quantity === 0) {
+      return "Out of Stock"
+    }
+    return quantity < 10
+      ? `Hurry, Only ${quantity} Left!`
+      : quantity > 25
+      ? "In Stock"
+      : `${quantity} Left`
+  }
+
   if (isLoading) {
     return <div>Loading...</div>
   }
   if (error) {
     return <div>There was an error</div>
   }
+
   return (
-    <div>
-      <h1>{data?.getProductBySlug?.name}</h1>
-      <Image
-        src={data?.getProductBySlug?.image.url}
-        alt={data?.getProductBySlug?.name}
-      />
-      <p>{activeVariantData?.getVariantById?.unitPrice}</p>
-      <p>{activeVariantData?.getVariantById?.productCode}</p>
-      <p>{activeVariantData?.getVariantById?.stock} Left</p>
-      {variants && (
-        <Variants variants={variants} setActiveVariantId={setActiveVariantId} />
-      )}
+    <Page>
+      <FlexWrapper direction="row" justify="space-between">
+        {imageUrl && <Image width={420} height={420} url={imageUrl} />}
+        <FlexWrapper>
+          <h4 style={{ fontWeight: 600 }}>{data?.getProductBySlug?.name}</h4>
+          <span>${activeVariantData?.getVariantById?.unitPrice}</span>
+          <span>SKU: {activeVariantData?.getVariantById?.productCode}</span>
+          <span>
+            {checkStock(activeVariantData?.getVariantById?.stock ?? 0)}
+          </span>
+          {variants && (
+            <Variants
+              variants={variants}
+              setActiveVariantId={setActiveVariantId}
+            />
+          )}
+        </FlexWrapper>
+      </FlexWrapper>
       {description && (
-        <div
+        <FlexWrapper
           dangerouslySetInnerHTML={{
             __html: description,
           }}
-        ></div>
+          justify="flex-start"
+        ></FlexWrapper>
       )}
-    </div>
+    </Page>
   )
 }

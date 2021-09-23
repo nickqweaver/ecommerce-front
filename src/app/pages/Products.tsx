@@ -4,10 +4,13 @@ import {
   ProductTileFragment,
   useGetAllProductTilesLazyQuery,
 } from "../../graphql/generated/types"
-import { Button } from "../components/Button"
+import { Button } from "../components/UI/Button"
 import { FlexWrapper } from "../components/FlexWrapper"
-import { Page } from "../components/Page"
-import { ProductCard, ProductCardLoader } from "../components/ProductCard"
+import { Page } from "../components/UI/Page"
+import {
+  ProductCard,
+  ProductCardLoader,
+} from "../components/Product/ProductCard"
 
 const PAGINATION_INCREMENT = 1
 
@@ -46,7 +49,6 @@ export function Products(props: ProductsProps) {
   const [getProducts, { data, loading: isLoading, error }] =
     useGetAllProductTilesLazyQuery({
       onCompleted: (products) => {
-        console.log("we her")
         if (products.getAllPaginatedProducts?.results) {
           console.log(
             products.getAllPaginatedProducts.results,

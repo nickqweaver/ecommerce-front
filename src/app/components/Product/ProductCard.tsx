@@ -1,9 +1,11 @@
 import React, { FC } from "react"
-import { ProductTileFragment } from "../../graphql/generated/types"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
-import { Button } from "./Button"
 import Loader from "react-content-loader"
+import { ProductTileFragment } from "src/graphql/generated/types"
+
+import { Button } from "../UI/Button"
+import { Image } from "../UI/Image"
 
 const Card = styled.div`
   padding: 32px 16px;
@@ -15,15 +17,6 @@ const Card = styled.div`
   align-items: center;
   min-width: 290px;
   max-width: 360px;
-`
-
-const Image = styled.div<{ url: string }>`
-  width: 200px;
-  height: 200px;
-  background: url(${(props) => props.url});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
 `
 
 const Container = styled.div`
@@ -70,7 +63,7 @@ export function ProductCard(props: ProductTileFragment) {
   return (
     <div>
       <Card>
-        <Image url={props?.image?.url ?? ""} />
+        <Image width={200} height={200} url={props?.image?.url ?? ""} />
         <Container>
           <CardText>
             <h5 style={{ fontWeight: 500, marginTop: `calc(3rem - 16px)` }}>
