@@ -1,34 +1,92 @@
-import React from "react"
-import { useGetAllProductTilesQuery } from "../../graphql/generated/types"
-import { ProductCard } from "../components/ProductCard"
+import React, { useState, useEffect } from "react"
+import styled from "styled-components"
+import {
+  useGetAllProductTilesLazyQuery,
+  useGetAllProductTilesQuery,
+  useGetVariantByIdLazyQuery,
+} from "../../graphql/generated/types"
+import { Button } from "../components/Button"
+import { ProductCard, ProductCardLoader } from "../components/ProductCard"
+
+const PAGINATION_INCREMENT = 1
 
 interface ProductsProps {}
 
+type GridProps = {
+  maxWidth?: number
+  gap?: number
+  columnSize: number
+  rowSize: number
+  isDense: boolean
+}
+
+const Grid = styled.div<GridProps>`
+  display: grid;
+  gap: 16px;
+  max-width: ${(props) => props.maxWidth}px;
+  width: 100%;
+  grid-gap: ${(props) => props.gap}px;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(${(props) => props.columnSize}px, 1fr)
+  );
+  grid-auto-rows: minmax(${(props) => props.rowSize}px, auto);
+  grid-auto-flow: ${(props) => (props.isDense ? "dense" : "row")};
+`
 export function Products(props: ProductsProps) {
-  const {
-    data,
-    loading: isLoading,
-    error,
-  } = useGetAllProductTilesQuery({
-    variables: { offset: 0, limit: 1 },
-    errorPolicy: "all", // TODO change this after index issue is fixed, error getting thrown but data still accessible
+  const [pagination, setPagination] = useState({
+    offset: 0,
+    limit: PAGINATION_INCREMENT,
   })
-  const products = data?.getAllPaginatedProducts?.results
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  const [prod, setProd] = useState<any[]>([]) // TODO fix any types
+
+  const [getProducts, { data, loading: isLoading, error }] =
+    useGetAllProductTilesLazyQuery({
+      onCompleted: (products) => {
+        if (products.getAllPaginatedProducts?.results) {
+          setProd([...prod, ...products.getAllPaginatedProducts?.results])
+        }
+      },
+    })
+
+  useEffect(() => {
+    getProducts({
+      variables: { offset: pagination.offset, limit: pagination.limit },
+    })
+  }, []) //eslint-disable-line
+
   if (error) {
     return <div>An error occured</div>
   }
-  if (typeof products === "undefined" || products === null) {
-    return <div>There are no products</div>
-  }
-  // TODO query product ID's pass the ID's into the cards and then query the card data?
+
+  const loadingItems = Array.from(Array(PAGINATION_INCREMENT).keys())
+
   return (
-    <div>
-      {products.map((product) => (
-        <ProductCard {...product} />
-      ))}
-    </div>
+    <>
+      <Grid columnSize={400} rowSize={460} gap={16} isDense>
+        {prod.map((product: any) => (
+          <ProductCard key={product.id} {...product} />
+        ))}
+        {isLoading && loadingItems.map((_item) => <ProductCardLoader />)}
+      </Grid>
+      <Button
+        onClick={() => {
+          const offset = pagination.offset + 1
+          const limit = pagination.limit + 1
+          getProducts({
+            variables: {
+              offset,
+              limit,
+            },
+          })
+          setPagination({
+            limit,
+            offset,
+          })
+        }}
+      >
+        More
+      </Button>
+    </>
   )
 }
