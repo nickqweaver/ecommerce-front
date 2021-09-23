@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import {
+  GetAllProductTilesQuery,
+  ProductTileFragment,
   useGetAllProductTilesLazyQuery,
   useGetAllProductTilesQuery,
   useGetVariantByIdLazyQuery,
@@ -41,7 +43,8 @@ export function Products(props: ProductsProps) {
     offset: 0,
     limit: PAGINATION_INCREMENT,
   })
-  const [prod, setProd] = useState<any[]>([]) // TODO fix any types
+
+  const [prod, setProd] = useState<ProductTileFragment[]>([])
 
   const [getProducts, { data, loading: isLoading, error }] =
     useGetAllProductTilesLazyQuery({
@@ -63,7 +66,6 @@ export function Products(props: ProductsProps) {
   }
 
   const loadingItems = Array.from(Array(PAGINATION_INCREMENT).keys())
-
   return (
     <Page>
       <Grid columnSize={320} rowSize={460} gap={16} isDense>
