@@ -1,6 +1,5 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import styled from "styled-components"
 import {
   useGetProductBySlugQuery,
   useGetVariantByIdLazyQuery,
@@ -9,13 +8,9 @@ import { Variants } from "../components/Variant/Variants"
 import { Page } from "../components/UI/Page"
 import { Image } from "../components/UI/Image"
 import { FlexWrapper } from "../components/FlexWrapper"
-
+// TODO add context
 export function Product() {
   let { slug } = useParams<{ slug: string }>()
-  const [activeVariantId, setActiveVariantId] = React.useState<string | null>(
-    null
-  )
-
   const {
     data,
     loading: isLoading,
@@ -23,12 +18,16 @@ export function Product() {
   } = useGetProductBySlugQuery({
     variables: { slug },
   })
-
+  const variants = data?.getProductBySlug?.variants
+  const variationOptions = data?.getProductBySlug?.variationOptions
   const [getActiveVariant, { data: activeVariantData }] =
     useGetVariantByIdLazyQuery()
   const productId = data?.getProductBySlug?.id
-  const variants = data?.getProductBySlug?.variants
   const description = data?.getProductBySlug?.description
+
+  const [activeVariantId, setActiveVariantId] = React.useState<string | null>(
+    null
+  )
 
   React.useEffect(() => {
     if (productId && activeVariantId) {
@@ -55,7 +54,6 @@ export function Product() {
   if (error) {
     return <div>There was an error</div>
   }
-
   return (
     <Page>
       <FlexWrapper direction="row" justify="space-between">
@@ -67,9 +65,10 @@ export function Product() {
           <span>
             {checkStock(activeVariantData?.getVariantById?.stock ?? 0)}
           </span>
-          {variants && (
+          {variants && variationOptions && (
             <Variants
               variants={variants}
+              variationOptions={variationOptions}
               setActiveVariantId={setActiveVariantId}
             />
           )}

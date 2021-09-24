@@ -77,6 +77,7 @@ export type ProductType = {
   brand: Scalars['String'];
   lowestVariantPrice: Scalars['Decimal'];
   hasDifferentVariantPricing: Scalars['Boolean'];
+  variationOptions?: Maybe<Array<VariationOptionType>>;
 };
 
 export type Query = {
@@ -136,6 +137,12 @@ export type TireVariantType = {
   rimCircumference: Scalars['Int'];
 };
 
+export type VariationOptionType = {
+  __typename?: 'VariationOptionType';
+  label: Scalars['String'];
+  options?: Maybe<Array<Scalars['String']>>;
+};
+
 export type WheelVariantType = {
   __typename?: 'WheelVariantType';
   id: Scalars['ID'];
@@ -159,7 +166,10 @@ export type ImageFragment = (
 export type ProductFragment = (
   { __typename?: 'ProductType' }
   & Pick<ProductType, 'name' | 'id' | 'description' | 'createdDate' | 'slug' | 'weight' | 'brand' | 'lowestVariantPrice' | 'hasDifferentVariantPricing'>
-  & { image: (
+  & { variationOptions?: Maybe<Array<(
+    { __typename?: 'VariationOptionType' }
+    & Pick<VariationOptionType, 'label' | 'options'>
+  )>>, image: (
     { __typename?: 'CloudinaryImageType' }
     & ImageFragment
   ), category: (
@@ -278,6 +288,10 @@ export const TireVariantFragmentDoc = gql`
     `;
 export const ProductFragmentDoc = gql`
     fragment Product on ProductType {
+  variationOptions {
+    label
+    options
+  }
   name
   id
   image {

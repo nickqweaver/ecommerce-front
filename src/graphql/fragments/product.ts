@@ -5,6 +5,10 @@ import { Image } from "./image"
 
 export const Product = gql`
   fragment Product on ProductType {
+    variationOptions {
+      label
+      options
+    }
     name
     id
     image {

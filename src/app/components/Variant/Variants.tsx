@@ -1,23 +1,31 @@
-import React from "react"
-import { AllVariantsType } from "src/graphql/generated/types"
-import { getVariantLabels, getVariantOptions } from "../../utils/variantHelpers"
+import React, { useCallback } from "react"
+import {
+  AllVariantsType,
+  VariationOptionType,
+} from "src/graphql/generated/types"
 import { VariantSelector } from "./VariantSelector"
 
 type VariantProps = {
   variants: AllVariantsType[]
   setActiveVariantId: (id: string | null) => void
+  variationOptions: VariationOptionType[]
 }
 export function Variants(props: VariantProps) {
   const { variants, setActiveVariantId } = props
-  const labels = getVariantLabels(props.variants)
-  const entries = labels.map((label) => [label, null])
-  const [selectedVariantOptions, setSelectedVariantOptions] = React.useState(
-    Object.fromEntries(entries)
-  )
+  const [selectedVariantOptions, setSelectedVariantOptions] = React.useState<{
+    [label: string]: string
+  }>()
 
-  const handleSelectedVariantOptions = (label: string, choice: string) => {
-    setSelectedVariantOptions({ ...selectedVariantOptions, [label]: choice })
-  }
+  const handleSelectedVariantOptions = useCallback(
+    (label: string, choice: string) => {
+      const newState = {
+        ...selectedVariantOptions,
+      }
+      newState[label] = choice
+      setSelectedVariantOptions(newState)
+    },
+    [selectedVariantOptions]
+  )
 
   const getVariantId = React.useCallback(
     (selectedOptions: { [label: string]: string }) => {
@@ -25,7 +33,9 @@ export function Variants(props: VariantProps) {
         (value) => value !== null
       )
       let idMatch = null
-
+      if (selectedOptionValues.length < 1) {
+        return null
+      }
       variants.forEach((variant) => {
         const values = Object.values(variant)
         const hasMatches = selectedOptionValues.every((option) =>
@@ -41,18 +51,21 @@ export function Variants(props: VariantProps) {
   )
 
   React.useEffect(() => {
-    setActiveVariantId(getVariantId(selectedVariantOptions))
-  }, [selectedVariantOptions, getVariantId, setActiveVariantId])
+    if (selectedVariantOptions) {
+      setActiveVariantId(getVariantId(selectedVariantOptions))
+    }
+  }, [selectedVariantOptions]) //eslint-disable-line
 
   return (
     <>
-      {getVariantOptions(variants).map((variantOption, index) => {
+      {props.variationOptions.map((variantionOption, index) => {
         return (
           <VariantSelector
             key={index}
-            label={variantOption.label}
-            options={variantOption.options}
+            label={variantionOption.label}
+            options={variantionOption.options ?? []}
             onChange={handleSelectedVariantOptions}
+            defaultActiveIndex={0} // Determine this above and then match up states, that way we already know the active ID before these compnents render
           />
         )
       })}
