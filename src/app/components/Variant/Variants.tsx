@@ -3,7 +3,7 @@ import {
   AllVariantsType,
   VariationOptionType,
 } from "src/graphql/generated/types"
-import { VariantSelector } from "./VariantSelector"
+import { VariantSelectors } from "./VariantSelectors"
 
 type VariantProps = {
   variants: AllVariantsType[]
@@ -16,6 +16,7 @@ export function Variants(props: VariantProps) {
     [label: string]: string
   }>()
 
+  const [variantOptions, setVariantOptions] = React.useState<string[]>([])
   const handleSelectedVariantOptions = useCallback(
     (label: string, choice: string) => {
       const newState = {
@@ -28,17 +29,14 @@ export function Variants(props: VariantProps) {
   )
 
   const getVariantId = React.useCallback(
-    (selectedOptions: { [label: string]: string }) => {
-      const selectedOptionValues = Object.values(selectedOptions).filter(
-        (value) => value !== null
-      )
+    (selectedOptions: string[]) => {
       let idMatch = null
-      if (selectedOptionValues.length < 1) {
+      if (selectedOptions.length < 1) {
         return null
       }
       variants.forEach((variant) => {
         const values = Object.values(variant)
-        const hasMatches = selectedOptionValues.every((option) =>
+        const hasMatches = selectedOptions.every((option) =>
           values.includes(option)
         )
         if (hasMatches) {
@@ -51,24 +49,14 @@ export function Variants(props: VariantProps) {
   )
 
   React.useEffect(() => {
-    if (selectedVariantOptions) {
-      setActiveVariantId(getVariantId(selectedVariantOptions))
-    }
-  }, [selectedVariantOptions]) //eslint-disable-line
+    setActiveVariantId(getVariantId(variantOptions))
+  }, [variantOptions]) //eslint-disable-line
 
   return (
-    <>
-      {props.variationOptions.map((variantionOption, index) => {
-        return (
-          <VariantSelector
-            key={index}
-            label={variantionOption.label}
-            options={variantionOption.options ?? []}
-            onChange={handleSelectedVariantOptions}
-            defaultActiveIndex={0} // Determine this above and then match up states, that way we already know the active ID before these compnents render
-          />
-        )
-      })}
-    </>
+    <VariantSelectors
+      variationOptions={props.variationOptions}
+      variantOptions={variantOptions}
+      setVariantOptions={setVariantOptions}
+    />
   )
 }
