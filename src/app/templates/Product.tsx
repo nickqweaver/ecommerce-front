@@ -20,8 +20,10 @@ export function Product() {
   })
   const variants = data?.getProductBySlug?.variants
   const variationOptions = data?.getProductBySlug?.variationOptions
-  const [getActiveVariant, { data: activeVariantData }] =
-    useGetVariantByIdLazyQuery()
+  const [
+    getActiveVariant,
+    { data: activeVariantData, loading: isActiveVariantDataLoading },
+  ] = useGetVariantByIdLazyQuery()
   const productId = data?.getProductBySlug?.id
   const description = data?.getProductBySlug?.description
 
@@ -60,11 +62,16 @@ export function Product() {
         {imageUrl && <Image width={420} height={420} url={imageUrl} />}
         <FlexWrapper>
           <h4 style={{ fontWeight: 600 }}>{data?.getProductBySlug?.name}</h4>
-          <span>${activeVariantData?.getVariantById?.unitPrice}</span>
-          <span>SKU: {activeVariantData?.getVariantById?.productCode}</span>
-          <span>
-            {checkStock(activeVariantData?.getVariantById?.stock ?? 0)}
-          </span>
+          {activeVariantId && !isActiveVariantDataLoading && (
+            <>
+              <span>${activeVariantData?.getVariantById?.unitPrice}</span>
+              <span>SKU: {activeVariantData?.getVariantById?.productCode}</span>
+              <span>
+                {checkStock(activeVariantData?.getVariantById?.stock ?? 0)}
+              </span>
+            </>
+          )}
+
           {variants && variationOptions && (
             <Variants
               variants={variants}
