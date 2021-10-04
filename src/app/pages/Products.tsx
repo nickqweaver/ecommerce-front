@@ -5,7 +5,7 @@ import {
   useGetAllProductTilesLazyQuery,
 } from "../../graphql/generated/types"
 import { Button } from "../components/UI/Button"
-import { FlexWrapper } from "../components/FlexWrapper"
+import { FlexWrapper } from "../components/UI/FlexWrapper"
 import { Page } from "../components/UI/Page"
 import {
   ProductCard,
@@ -46,19 +46,21 @@ export function Products(props: ProductsProps) {
 
   const [prod, setProd] = useState<ProductTileFragment[]>([])
 
-  const [getProducts, { data, loading: isLoading, error }] =
-    useGetAllProductTilesLazyQuery({
-      onCompleted: (products) => {
-        if (products.getAllPaginatedProducts?.results) {
-          console.log(
-            products.getAllPaginatedProducts.results,
-            "On Completed Results"
-          )
-          setProd([...prod, ...products.getAllPaginatedProducts?.results])
-        }
-      },
-      fetchPolicy: "no-cache", // TODO - When clicking product details and then going back to Products page, refetching is cached and won't call onCompleted to update state. Look into how we can still use caching for this use case
-    })
+  const [
+    getProducts,
+    { data, loading: isLoading, error },
+  ] = useGetAllProductTilesLazyQuery({
+    onCompleted: (products) => {
+      if (products.getAllPaginatedProducts?.results) {
+        console.log(
+          products.getAllPaginatedProducts.results,
+          "On Completed Results"
+        )
+        setProd([...prod, ...products.getAllPaginatedProducts?.results])
+      }
+    },
+    fetchPolicy: "no-cache", // TODO - When clicking product details and then going back to Products page, refetching is cached and won't call onCompleted to update state. Look into how we can still use caching for this use case
+  })
 
   useEffect(() => {
     getProducts({

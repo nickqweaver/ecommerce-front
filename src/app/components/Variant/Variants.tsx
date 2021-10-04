@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React from "react"
 import {
   AllVariantsType,
   VariationOptionType,
@@ -12,21 +12,7 @@ type VariantProps = {
 }
 export function Variants(props: VariantProps) {
   const { variants, setActiveVariantId } = props
-  const [selectedVariantOptions, setSelectedVariantOptions] = React.useState<{
-    [label: string]: string
-  }>()
-
   const [variantOptions, setVariantOptions] = React.useState<string[]>([])
-  const handleSelectedVariantOptions = useCallback(
-    (label: string, choice: string) => {
-      const newState = {
-        ...selectedVariantOptions,
-      }
-      newState[label] = choice
-      setSelectedVariantOptions(newState)
-    },
-    [selectedVariantOptions]
-  )
 
   const getVariantId = React.useCallback(
     (selectedOptions: string[]) => {
@@ -37,7 +23,7 @@ export function Variants(props: VariantProps) {
       variants.forEach((variant) => {
         const values = Object.values(variant)
         const hasMatches = selectedOptions.every((option) =>
-          values.includes(option)
+          values.toString().includes(option)
         )
         if (hasMatches) {
           idMatch = variant.id

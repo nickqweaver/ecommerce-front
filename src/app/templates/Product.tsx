@@ -7,15 +7,11 @@ import {
 import { Variants } from "../components/Variant/Variants"
 import { Page } from "../components/UI/Page"
 import { Image } from "../components/UI/Image"
-import { FlexWrapper } from "../components/FlexWrapper"
+import { FlexWrapper } from "../components/UI/FlexWrapper"
 // TODO add context
 export function Product() {
   let { slug } = useParams<{ slug: string }>()
-  const {
-    data,
-    loading: isLoading,
-    error,
-  } = useGetProductBySlugQuery({
+  const { data, loading: isLoading, error } = useGetProductBySlugQuery({
     variables: { slug },
   })
   const variants = data?.getProductBySlug?.variants

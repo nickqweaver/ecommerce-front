@@ -1,5 +1,7 @@
 import React, { FC } from "react"
 import { VariationOptionType } from "src/graphql/generated/types"
+import { FlexWrapper } from "../UI/FlexWrapper"
+import { VariationButton } from "./VariationButton"
 
 type VariantSelectorsProps = {
   variationOptions: VariationOptionType[]
@@ -38,24 +40,23 @@ export const VariantSelectors: FC<VariantSelectorsProps> = ({
             <label style={{ fontWeight: 600 }} htmlFor={option.label}>
               {option.label}
             </label>
-            {option.options?.map((option) => {
-              return (
-                <button
-                  style={{
-                    background: variantOptions.some(
-                      (variantOption) => variantOption === option
-                    )
-                      ? "green"
-                      : "none",
-                  }}
-                  onClick={() => {
-                    handleSelectionChange(option, optionIndex)
-                  }}
-                >
-                  {option}
-                </button>
-              )
-            })}
+            <FlexWrapper direction="row">
+              {option.options?.map((option) => {
+                return (
+                  <VariationButton
+                    margin={"0px 4px"}
+                    isSelected={variantOptions.some(
+                      (vOption) => vOption === option
+                    )}
+                    onClick={() => {
+                      handleSelectionChange(option, optionIndex)
+                    }}
+                  >
+                    {option}
+                  </VariationButton>
+                )
+              })}
+            </FlexWrapper>
           </>
         )
       })}
