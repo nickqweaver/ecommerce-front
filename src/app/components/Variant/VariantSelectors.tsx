@@ -37,13 +37,18 @@ export const VariantSelectors: FC<VariantSelectorsProps> = ({
       {variationOptions.map((option, optionIndex) => {
         return (
           <>
-            <label style={{ fontWeight: 600 }} htmlFor={option.label}>
+            <label
+              key={`${option.label} ${optionIndex}`}
+              style={{ fontWeight: 600 }}
+              htmlFor={option.label}
+            >
               {option.label}
             </label>
             <FlexWrapper direction="row">
-              {option.options?.map((option) => {
+              {option.options?.map((option, index) => {
                 return (
                   <VariationButton
+                    key={`${option} ${index}`}
                     margin={"0px 4px"}
                     isSelected={variantOptions.some(
                       (vOption) => vOption === option
