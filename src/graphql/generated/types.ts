@@ -49,7 +49,39 @@ export type CloudinaryImageType = {
   url: Scalars['String'];
 };
 
+export type CreateOrder = {
+  __typename?: 'CreateOrder';
+  status?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  orderItems?: Maybe<Array<OrderItemResponseType>>;
+};
 
+
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createOrder?: Maybe<CreateOrder>;
+};
+
+
+export type MutationCreateOrderArgs = {
+  orderItems?: Maybe<Array<Maybe<OrderItemInput>>>;
+};
+
+export type OrderItemInput = {
+  productId?: Maybe<Scalars['String']>;
+  productCode?: Maybe<Scalars['String']>;
+  quantity?: Maybe<Scalars['Int']>;
+};
+
+export type OrderItemResponseType = {
+  __typename?: 'OrderItemResponseType';
+  productVariation?: Maybe<AllVariantsType>;
+  status?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+  image?: Maybe<CloudinaryImageType>;
+};
 
 export type PaginatedProductIdsType = {
   __typename?: 'PaginatedProductIdsType';
@@ -203,6 +235,30 @@ export type TireVariantFragment = (
   & Pick<TireVariantType, 'id' | 'productCode' | 'stock' | 'unitPrice' | 'height' | 'width' | 'rimCircumference'>
 );
 
+export type CreateOrderMutationVariables = Exact<{
+  orderItems?: Maybe<Array<Maybe<OrderItemInput>> | Maybe<OrderItemInput>>;
+}>;
+
+
+export type CreateOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrder?: Maybe<(
+    { __typename?: 'CreateOrder' }
+    & Pick<CreateOrder, 'id' | 'status' | 'message'>
+    & { orderItems?: Maybe<Array<(
+      { __typename?: 'OrderItemResponseType' }
+      & Pick<OrderItemResponseType, 'status' | 'message'>
+      & { productVariation?: Maybe<(
+        { __typename?: 'WheelVariantType' }
+        & WheelVariantFragment
+      ) | (
+        { __typename?: 'TireVariantType' }
+        & TireVariantFragment
+      )> }
+    )>> }
+  )> }
+);
+
 export type GetAllProductTilesQueryVariables = Exact<{
   offset: Scalars['Int'];
   limit: Scalars['Int'];
@@ -330,6 +386,49 @@ export const ProductTileFragmentDoc = gql`
   slug
 }
     ${ImageFragmentDoc}`;
+export const CreateOrderDocument = gql`
+    mutation createOrder($orderItems: [OrderItemInput]) {
+  createOrder(orderItems: $orderItems) {
+    id
+    status
+    message
+    orderItems {
+      productVariation {
+        ...WheelVariant
+        ...TireVariant
+      }
+      status
+      message
+    }
+  }
+}
+    ${WheelVariantFragmentDoc}
+${TireVariantFragmentDoc}`;
+export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutation, CreateOrderMutationVariables>;
+
+/**
+ * __useCreateOrderMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderMutation, { data, loading, error }] = useCreateOrderMutation({
+ *   variables: {
+ *      orderItems: // value for 'orderItems'
+ *   },
+ * });
+ */
+export function useCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderMutation, CreateOrderMutationVariables>) {
+        return Apollo.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument, baseOptions);
+      }
+export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
+export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutation>;
+export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
 export const GetAllProductTilesDocument = gql`
     query getAllProductTiles($offset: Int!, $limit: Int!) {
   getAllPaginatedProducts(offset: $offset, limit: $limit) {

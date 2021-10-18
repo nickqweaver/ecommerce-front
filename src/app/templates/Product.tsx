@@ -1,6 +1,7 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import {
+  useCreateOrderMutation,
   useGetProductBySlugQuery,
   useGetVariantByIdLazyQuery,
 } from "src/graphql/generated/types"
@@ -11,7 +12,11 @@ import { FlexWrapper } from "../components/UI/FlexWrapper"
 // TODO add context
 export function Product() {
   let { slug } = useParams<{ slug: string }>()
-  const { data, loading: isLoading, error } = useGetProductBySlugQuery({
+  const {
+    data,
+    loading: isLoading,
+    error,
+  } = useGetProductBySlugQuery({
     variables: { slug },
   })
   const variants = data?.getProductBySlug?.variants
@@ -45,6 +50,7 @@ export function Product() {
       ? "In Stock"
       : `${quantity} Left`
   }
+  const [createOrder] = useCreateOrderMutation()
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -75,6 +81,19 @@ export function Product() {
               setActiveVariantId={setActiveVariantId}
             />
           )}
+          <button
+            onClick={() =>
+              createOrder({
+                variables: {
+                  orderItems: [
+                    { productCode: "1", productId: "2", quantity: 1 },
+                  ],
+                },
+              })
+            }
+          >
+            Create Order
+          </button>
         </FlexWrapper>
       </FlexWrapper>
       {description && (
