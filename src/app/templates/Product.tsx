@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useParams } from "react-router-dom"
 import {
   useCreateOrderMutation,
@@ -9,6 +9,9 @@ import { Variants } from "../components/Variant/Variants"
 import { Page } from "../components/UI/Page"
 import { Image } from "../components/UI/Image"
 import { FlexWrapper } from "../components/UI/FlexWrapper"
+import { Button } from "../components/UI/Button"
+import { CartContext } from "../context/cart"
+
 // TODO add context
 export function Product() {
   let { slug } = useParams<{ slug: string }>()
@@ -25,6 +28,7 @@ export function Product() {
     getActiveVariant,
     { data: activeVariantData, loading: isActiveVariantDataLoading },
   ] = useGetVariantByIdLazyQuery()
+  const { dispatch } = useContext(CartContext)
   const productId = data?.getProductBySlug?.id
   const description = data?.getProductBySlug?.description
 
@@ -50,7 +54,8 @@ export function Product() {
       ? "In Stock"
       : `${quantity} Left`
   }
-  const [createOrder] = useCreateOrderMutation()
+
+  const activeVariant = activeVariantData?.getVariantById
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -66,14 +71,11 @@ export function Product() {
           <h4 style={{ fontWeight: 600 }}>{data?.getProductBySlug?.name}</h4>
           {activeVariantId && !isActiveVariantDataLoading && (
             <>
-              <span>${activeVariantData?.getVariantById?.unitPrice}</span>
-              <span>SKU: {activeVariantData?.getVariantById?.productCode}</span>
-              <span>
-                {checkStock(activeVariantData?.getVariantById?.stock ?? 0)}
-              </span>
+              <span>${activeVariant?.unitPrice}</span>
+              <span>SKU: {activeVariant?.productCode}</span>
+              <span>{checkStock(activeVariant?.stock ?? 0)}</span>
             </>
           )}
-
           {variants && variationOptions && (
             <Variants
               variants={variants}
@@ -81,19 +83,24 @@ export function Product() {
               setActiveVariantId={setActiveVariantId}
             />
           )}
-          <button
+          <Button
+            style={{ marginTop: "32px" }}
             onClick={() =>
-              createOrder({
-                variables: {
-                  orderItems: [
-                    { productCode: "1", productId: "2", quantity: 1 },
-                  ],
+              dispatch({
+                type: "ADD_CART_ITEM",
+                payload: {
+                  item: {
+                    productCode: activeVariant?.productCode,
+                    quantity: 1,
+                    productId: data?.getProductBySlug?.id,
+                    unitPrice: parseFloat(activeVariant?.unitPrice),
+                  },
                 },
               })
             }
           >
-            Create Order
-          </button>
+            Add to Cart
+          </Button>
         </FlexWrapper>
       </FlexWrapper>
       {description && (
