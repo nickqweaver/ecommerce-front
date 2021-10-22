@@ -17,14 +17,16 @@ const initialState = {
   total: 0.0,
 }
 
-type ActionType = {
-  type: "ADD_CART_ITEM"
-  payload: { item: CartItem }
-}
+type Actions =
+  | {
+      type: "ADD_CART_ITEM"
+      payload: { item: CartItem }
+    }
+  | { type: "DELETE_CART_ITEM"; payload: { productCode: string } }
 
 export const CartContext = React.createContext<{
   state: Cart
-  dispatch: (action: ActionType) => void
+  dispatch: (action: Actions) => void
 }>({
   state: initialState,
   dispatch: () => {},
@@ -52,15 +54,30 @@ const mergeSameItems = (items: CartItem[], newItem: CartItem): CartItem[] => {
   return [...items, newItem]
 }
 
-function reducer(state: Cart, action: ActionType) {
+function reducer(state: Cart, action: Actions) {
   switch (action.type) {
     case "ADD_CART_ITEM":
-      const newItems = mergeSameItems([...state.items], action.payload.item)
+      const addCartItems = mergeSameItems([...state.items], action.payload.item)
       return {
         ...state,
-        items: newItems,
-        total: getUpdatedTotalPrice(newItems),
+        items: addCartItems,
+        total: getUpdatedTotalPrice(addCartItems),
         quantity: state.quantity + (action.payload.item?.quantity ?? 0),
+      }
+    case "DELETE_CART_ITEM":
+      const deleteCartItems = [...state.items].filter(
+        (item) => item.productCode !== action.payload.productCode
+      )
+
+      return {
+        ...state,
+        items: deleteCartItems,
+        total: getUpdatedTotalPrice(deleteCartItems),
+        quantity: deleteCartItems.reduce<number>(
+          (accumulator, currentItem) =>
+            accumulator + (currentItem.quantity ?? 0),
+          0
+        ),
       }
   }
 }

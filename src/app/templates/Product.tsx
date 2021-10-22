@@ -101,6 +101,20 @@ export function Product() {
           >
             Add to Cart
           </Button>
+          <Button
+            style={{ marginTop: "32px" }}
+            onClick={() => {
+              if (activeVariant?.productCode)
+                dispatch({
+                  type: "DELETE_CART_ITEM",
+                  payload: {
+                    productCode: activeVariant?.productCode,
+                  },
+                })
+            }}
+          >
+            Delete Item
+          </Button>
         </FlexWrapper>
       </FlexWrapper>
       {description && (
