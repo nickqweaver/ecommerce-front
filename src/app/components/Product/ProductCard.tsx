@@ -11,7 +11,7 @@ const Card = styled.div`
   padding: 32px 16px;
   background-color: #fff;
   display: flex;
-  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.08);
   border-radius: 6px;
   flex-direction: column;
   align-items: center;

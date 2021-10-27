@@ -3,7 +3,7 @@ import { createGlobalStyle } from "styled-components"
 export default createGlobalStyle`
    @import url('https://fonts.googleapis.com/css?family=Poppins:300,400, 500, 600');
 
-html {font-size: 100%;} /*16px*/
+html, body {font-size: 100%; margin: 0; padding: 0} /*16px*/
 
 body {
   background: white;
@@ -11,6 +11,7 @@ body {
   font-weight: 300;
   line-height: 1.75;
   color: #000000;
+  box-sizing: border-box;
 }
 
 p {margin-bottom: 1rem;}
