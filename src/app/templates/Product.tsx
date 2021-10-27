@@ -1,7 +1,6 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import {
-  useCreateOrderMutation,
   useGetProductBySlugQuery,
   useGetVariantByIdLazyQuery,
 } from "src/graphql/generated/types"
@@ -10,7 +9,7 @@ import { Page } from "../components/UI/Page"
 import { Image } from "../components/UI/Image"
 import { FlexWrapper } from "../components/UI/FlexWrapper"
 import { Button } from "../components/UI/Button"
-import { CartContext } from "../context/cart"
+import { useCart } from "../hooks/useCart"
 
 // TODO add context
 export function Product() {
@@ -28,7 +27,7 @@ export function Product() {
     getActiveVariant,
     { data: activeVariantData, loading: isActiveVariantDataLoading },
   ] = useGetVariantByIdLazyQuery()
-  const { dispatch } = useContext(CartContext)
+  const { updateCart } = useCart()
   const productId = data?.getProductBySlug?.id
   const description = data?.getProductBySlug?.description
 
@@ -86,11 +85,11 @@ export function Product() {
           <Button
             style={{ marginTop: "32px" }}
             onClick={() =>
-              dispatch({
+              updateCart({
                 type: "ADD_CART_ITEM",
                 payload: {
                   item: {
-                    productCode: activeVariant?.productCode,
+                    variantId: activeVariant?.id,
                     quantity: 1,
                     productId: data?.getProductBySlug?.id,
                     unitPrice: parseFloat(activeVariant?.unitPrice),
@@ -105,7 +104,7 @@ export function Product() {
             style={{ marginTop: "32px" }}
             onClick={() => {
               if (activeVariant?.productCode)
-                dispatch({
+                updateCart({
                   type: "DELETE_CART_ITEM",
                   payload: {
                     productCode: activeVariant?.productCode,

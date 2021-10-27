@@ -22,7 +22,7 @@ type CartProps = {
   itemCount: number
 }
 
-export default function Cart(props: CartProps) {
+export default function CartIcon(props: CartProps) {
   return (
     <FlexWrapper justify="center" alignItems="center" position="relative">
       {props.itemCount > 0 && (

@@ -42,7 +42,7 @@ const getUpdatedTotalPrice = (items: CartItem[]): number => {
 
 const mergeSameItems = (items: CartItem[], newItem: CartItem): CartItem[] => {
   const matchedIndex = items.findIndex(
-    (item) => item.productCode === newItem.productCode
+    (item) => item.variantId === newItem.variantId
   )
   if (matchedIndex >= 0) {
     return items.map((item, index) =>
@@ -66,7 +66,7 @@ function reducer(state: Cart, action: Actions) {
       }
     case "DELETE_CART_ITEM":
       const deleteCartItems = [...state.items].filter(
-        (item) => item.productCode !== action.payload.productCode
+        (item) => item.variantId !== action.payload.productCode
       )
 
       return {

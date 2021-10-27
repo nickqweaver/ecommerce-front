@@ -1,6 +1,7 @@
-import React, { FC, useContext } from "react"
+import React, { FC } from "react"
 import { Link } from "react-router-dom"
-import { CartContext, CartItem } from "src/app/context/cart"
+import { CartItem } from "src/app/context/cart"
+import { useCart } from "src/app/hooks/useCart"
 import CartIcon from "src/app/icons/CartIcon"
 import styled from "styled-components"
 import { FlexWrapper } from "../UI/FlexWrapper"
@@ -28,8 +29,7 @@ const NavigationContent = styled.div`
 type NavigationProps = {} & NavigationBarProps
 
 export const Navigation: FC<NavigationProps> = ({ height }) => {
-  const { state } = useContext(CartContext)
-
+  const { cart } = useCart()
   const getTotalItemCount = (items: CartItem[]): number => {
     return items.reduce<number>(
       (previousValue, currentValue) =>
@@ -53,7 +53,7 @@ export const Navigation: FC<NavigationProps> = ({ height }) => {
               textDecoration: "none",
             }}
           >
-            <CartIcon itemCount={getTotalItemCount(state.items)} />
+            <CartIcon itemCount={getTotalItemCount(cart.items)} />
           </Link>
         </FlexWrapper>
       </NavigationContent>
