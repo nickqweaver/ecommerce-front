@@ -1,8 +1,35 @@
 import React from "react"
+import styled from "styled-components"
+import { FlexWrapper } from "../components/UI/FlexWrapper"
 
-export default function Cart() {
+const CartCounter = styled.span`
+  width: 20px;
+  height: 20px;
+  border-radius: 1000rem;
+  color: #fff;
+  font-size: 10px;
+  background-color: #0099ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  font-weight: 600;
+`
+
+type CartProps = {
+  itemCount: number
+}
+
+export default function Cart(props: CartProps) {
   return (
-    <>
+    <FlexWrapper justify="center" alignItems="center" position="relative">
+      {props.itemCount > 0 && (
+        <CartCounter>
+          {props.itemCount < 100 ? props.itemCount : "99"}
+        </CartCounter>
+      )}
       <svg
         width="24"
         height="24"
@@ -62,6 +89,6 @@ export default function Cart() {
           d="M10 7H18"
         ></path>
       </svg>
-    </>
+    </FlexWrapper>
   )
 }

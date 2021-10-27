@@ -8,6 +8,7 @@ type AlignType =
   | "space-around"
 
 type FlexWrapperProps = {
+  position?: "relative" | "absolute" | "fixed"
   justify?: AlignType
   alignItems?: AlignType
   direction?: "column" | "row" | "row-reverse" | "column-reverse"
@@ -27,4 +28,5 @@ export const FlexWrapper = styled.div<FlexWrapperProps>`
   padding: ${(props) => props.padding};
   max-width: ${(props) => props.maxWidth};
   height: ${(props) => props.height};
+  position: ${(props) => props.position};
 `

@@ -1,7 +1,7 @@
 import React, { useReducer } from "react"
 import { OrderItemInput } from "src/graphql/generated/types"
 
-type CartItem = {
+export type CartItem = {
   unitPrice: number
 } & OrderItemInput
 

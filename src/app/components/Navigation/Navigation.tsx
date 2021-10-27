@@ -1,6 +1,7 @@
-import React, { FC } from "react"
+import React, { FC, useContext } from "react"
 import { Link } from "react-router-dom"
-import Cart from "src/app/icons/Cart"
+import { CartContext, CartItem } from "src/app/context/cart"
+import CartIcon from "src/app/icons/CartIcon"
 import styled from "styled-components"
 import { FlexWrapper } from "../UI/FlexWrapper"
 
@@ -21,11 +22,21 @@ const NavigationContent = styled.div`
   height: 100%;
   grid-template-columns: auto auto;
   margin: 0px 16px;
+  background-color: #fff;
 `
 
 type NavigationProps = {} & NavigationBarProps
 
 export const Navigation: FC<NavigationProps> = ({ height }) => {
+  const { state } = useContext(CartContext)
+
+  const getTotalItemCount = (items: CartItem[]): number => {
+    return items.reduce<number>(
+      (previousValue, currentValue) =>
+        previousValue + (currentValue.quantity ?? 0),
+      0
+    )
+  }
   return (
     <NavigationBar height={height}>
       <NavigationContent>
@@ -33,8 +44,16 @@ export const Navigation: FC<NavigationProps> = ({ height }) => {
           Links
         </FlexWrapper>
         <FlexWrapper justify="center" alignItems="flex-end">
-          <Link to="/cart">
-            <Cart />
+          <Link
+            to="/cart"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textDecoration: "none",
+            }}
+          >
+            <CartIcon itemCount={getTotalItemCount(state.items)} />
           </Link>
         </FlexWrapper>
       </NavigationContent>
