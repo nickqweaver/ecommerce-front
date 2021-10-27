@@ -83,7 +83,7 @@ export function Product() {
             />
           )}
           <Button
-            style={{ marginTop: "32px" }}
+            style={{ marginTop: "var(--space-x4)" }}
             onClick={() =>
               updateCart({
                 type: "ADD_CART_ITEM",
@@ -101,7 +101,7 @@ export function Product() {
             Add to Cart
           </Button>
           <Button
-            style={{ marginTop: "32px" }}
+            style={{ marginTop: "var(--space-x4)" }}
             onClick={() => {
               if (activeVariant?.productCode)
                 updateCart({

@@ -5,16 +5,16 @@ import { FlexWrapper } from "../components/UI/FlexWrapper"
 const CartCounter = styled.span`
   width: 20px;
   height: 20px;
-  border-radius: 1000rem;
+  border-radius: var(--circle-border-radius);
   color: #fff;
-  font-size: 10px;
-  background-color: #0099ff;
+  font-size: var(--small-font-size);
+  background-color: var(--primary-brand-color);
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: -12px;
-  right: -12px;
+  top: calc(var(--space-x1_5) * -1);
+  right: calc(var(--space-x1_5) * -1);
   font-weight: 600;
 `
 

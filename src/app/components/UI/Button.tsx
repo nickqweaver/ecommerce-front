@@ -1,13 +1,13 @@
 import styled from "styled-components"
 
 export const Button = styled.button`
-  padding: 8px 24px;
+  padding: var(--space-x1) var(--space-x3);
   border: none;
-  background-color: #0099ff;
+  background-color: var(--primary-brand-color);
   cursor: pointer;
   display: flex;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: var(--default-border-radius);
   color: #fff;
   font-weight: 400;
 `

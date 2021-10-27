@@ -19,10 +19,10 @@ const NavigationBar = styled.nav<NavigationBarProps>`
 
 const NavigationContent = styled.div`
   display: grid;
-  width: calc(100% - 32px);
+  width: calc(100% - var(--space-x4));
   height: 100%;
   grid-template-columns: auto auto;
-  margin: 0px 16px;
+  margin: var(--space-x0) var(--space-x2);
   background-color: #fff;
 `
 
