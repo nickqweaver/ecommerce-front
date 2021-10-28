@@ -7,7 +7,7 @@ import { ProductTileFragment } from "src/graphql/generated/types"
 import { Button } from "../UI/Button"
 import { Image } from "../UI/Image"
 
-const Card = styled.div`
+export const Card = styled.div`
   padding: var(--space-x4) var(--space-x2);
   background-color: #fff;
   display: flex;

@@ -42,15 +42,48 @@ export const CartItem: FC<CartItemProps> = ({
   }
 
   return (
-    <FlexWrapper direction="row" justify="space-between">
+    <FlexWrapper direction="row" justify="flex-start" alignItems="center">
       <Image
-        height={120}
-        width={120}
+        height={84}
+        width={84}
         url={productData?.getProductById?.image.url ?? ""}
       />
-      <p>SKU: {variationData?.getVariantById?.productCode}</p>
-      <p>Total Price ${variationData?.getVariantById?.unitPrice * quantity}</p>
-      <p>Quantity: {quantity}</p>
+      <FlexWrapper
+        justify="flex-start"
+        alignItems="flex-start"
+        style={{ paddingLeft: "var(--space-x4)", maxHeight: "84px" }}
+        width="unset"
+      >
+        <h5 style={{ margin: "0px", fontWeight: 500, fontSize: "1rem" }}>
+          {productData?.getProductById?.brand}
+        </h5>
+        <FlexWrapper
+          style={{ lineHeight: 1 }}
+          direction="row"
+          justify="flex-start"
+        >
+          <h5
+            style={{
+              margin: "0px",
+              fontWeight: 500,
+            }}
+          >
+            ${variationData?.getVariantById?.unitPrice}
+          </h5>
+          <p style={{ padding: "0px var(--space-x_5)", fontSize: "0.75rem" }}>
+            x
+          </p>
+          <h5
+            style={{
+              margin: "0px",
+              color: "var(--secondary-font-color)",
+              fontWeight: 500,
+            }}
+          >
+            {quantity < 10 ? `0${quantity}` : quantity}
+          </h5>
+        </FlexWrapper>
+      </FlexWrapper>
     </FlexWrapper>
   )
 }

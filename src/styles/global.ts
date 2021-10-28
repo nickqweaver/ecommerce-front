@@ -41,9 +41,11 @@ h5 {font-size: 1.25rem;}
   --light-box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.08);
   --primary-brand-color: #0099ff;
   --secondary-font-color: #9e9e9e;
+  --foreground-color: #f5f6f7;
+  --background-color: #ffffff;
   --small-font-size: 0.70rem;
   --default-border-radius: 6px;
-  --circle-border-radius: 1000rem;
+  --circle-border-radius: 1000rem;  
   --space-x0: 0rem;
   --space-x_25: 0.125rem;
   --space-x_5: 0.25rem;
