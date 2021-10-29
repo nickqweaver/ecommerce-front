@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { CartItem } from "../components/Cart/CartItem"
 import { CartItemsCard } from "../components/Cart/CartItemsCard"
+import { CheckoutForm } from "../components/Cart/CheckoutForm"
 import { Card } from "../components/Product/ProductCard"
 import { FlexWrapper } from "../components/UI/FlexWrapper"
 import { Page } from "../components/UI/Page"
@@ -25,7 +26,9 @@ export const Cart = () => {
             maxWidth: "unset",
             marginRight: "var(--space-x4)",
           }}
-        ></Card>
+        >
+          <CheckoutForm />
+        </Card>
         <CartItemsCard>
           {cart.items.map((item) => {
             if (
