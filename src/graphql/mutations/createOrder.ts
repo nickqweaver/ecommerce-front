@@ -1,5 +1,7 @@
 import { gql } from "@apollo/client"
 import { WheelVariant, TireVariant } from "../fragments/variants"
+import { Image } from "../fragments/image"
+import { OrderItemResponse } from "../fragments/orderItemResponse"
 
 export const CREATE_ORDER = gql`
   mutation createOrder($orderItems: [OrderItemInput]) {
@@ -8,15 +10,12 @@ export const CREATE_ORDER = gql`
       status
       message
       orderItems {
-        productVariation {
-          ...WheelVariant
-          ...TireVariant
-        }
-        status
-        message
+        ...OrderItemResponse
       }
     }
   }
   ${WheelVariant}
   ${TireVariant}
+  ${OrderItemResponse}
+  ${Image}
 `
