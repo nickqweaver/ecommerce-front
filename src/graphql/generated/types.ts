@@ -1025,6 +1025,23 @@ export type TireVariantFragment = (
   & Pick<TireVariantType, 'id' | 'productCode' | 'stock' | 'unitPrice' | 'height' | 'width' | 'rimCircumference'>
 );
 
+export type CreateAddressMutationVariables = Exact<{
+  address?: Maybe<AddressInput>;
+}>;
+
+
+export type CreateAddressMutation = (
+  { __typename?: 'Mutation' }
+  & { createAddress?: Maybe<(
+    { __typename?: 'CreateAddress' }
+    & Pick<CreateAddress, 'success'>
+    & { address?: Maybe<(
+      { __typename?: 'AddressType' }
+      & AddressFragment
+    )> }
+  )> }
+);
+
 export type CreateCustomerMutationVariables = Exact<{
   email: Scalars['String'];
   username: Scalars['String'];
@@ -1058,6 +1075,24 @@ export type CreateOrderMutation = (
       { __typename?: 'OrderItemResponseType' }
       & OrderItemResponseFragment
     )>> }
+  )> }
+);
+
+export type LoginMutationVariables = Exact<{
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login?: Maybe<(
+    { __typename?: 'Login' }
+    & Pick<Login, 'success' | 'token'>
+    & { customer?: Maybe<(
+      { __typename?: 'CustomerType' }
+      & CustomerFragment
+    )> }
   )> }
 );
 
@@ -1251,6 +1286,41 @@ export const ProductTileFragmentDoc = gql`
   slug
 }
     ${ImageFragmentDoc}`;
+export const CreateAddressDocument = gql`
+    mutation createAddress($address: AddressInput) {
+  createAddress(address: $address) {
+    success
+    address {
+      ...Address
+    }
+  }
+}
+    ${AddressFragmentDoc}`;
+export type CreateAddressMutationFn = Apollo.MutationFunction<CreateAddressMutation, CreateAddressMutationVariables>;
+
+/**
+ * __useCreateAddressMutation__
+ *
+ * To run a mutation, you first call `useCreateAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAddressMutation, { data, loading, error }] = useCreateAddressMutation({
+ *   variables: {
+ *      address: // value for 'address'
+ *   },
+ * });
+ */
+export function useCreateAddressMutation(baseOptions?: Apollo.MutationHookOptions<CreateAddressMutation, CreateAddressMutationVariables>) {
+        return Apollo.useMutation<CreateAddressMutation, CreateAddressMutationVariables>(CreateAddressDocument, baseOptions);
+      }
+export type CreateAddressMutationHookResult = ReturnType<typeof useCreateAddressMutation>;
+export type CreateAddressMutationResult = Apollo.MutationResult<CreateAddressMutation>;
+export type CreateAddressMutationOptions = Apollo.BaseMutationOptions<CreateAddressMutation, CreateAddressMutationVariables>;
 export const CreateCustomerDocument = gql`
     mutation createCustomer($email: String!, $username: String!, $password: String!) {
   createCustomer(email: $email, username: $username, password: $password) {
@@ -1326,6 +1396,43 @@ export function useCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
 export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutation>;
 export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
+export const LoginDocument = gql`
+    mutation login($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
+    success
+    token
+    customer {
+      ...Customer
+    }
+  }
+}
+    ${CustomerFragmentDoc}`;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const GetAllProductTilesDocument = gql`
     query getAllProductTiles($offset: Int!, $limit: Int!) {
   getAllPaginatedProducts(offset: $offset, limit: $limit) {
