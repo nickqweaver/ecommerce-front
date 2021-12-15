@@ -23,6 +23,7 @@ type Actions =
       payload: { item: CartItem }
     }
   | { type: "DELETE_CART_ITEM"; payload: { productCode: string } }
+  | { type: "CLEAR_CART" }
 
 export const CartContext = React.createContext<{
   state: Cart
@@ -68,7 +69,6 @@ function reducer(state: Cart, action: Actions) {
       const deleteCartItems = [...state.items].filter(
         (item) => item.variantId !== action.payload.productCode
       )
-
       return {
         ...state,
         items: deleteCartItems,
@@ -78,6 +78,10 @@ function reducer(state: Cart, action: Actions) {
             accumulator + (currentItem.quantity ?? 0),
           0
         ),
+      }
+    case "CLEAR_CART":
+      return {
+        ...initialState,
       }
   }
 }

@@ -6,5 +6,6 @@ export const useCart = () => {
   return {
     cart: state,
     updateCart: dispatch,
+    clearCart: () => dispatch({ type: "CLEAR_CART" }),
   }
 }

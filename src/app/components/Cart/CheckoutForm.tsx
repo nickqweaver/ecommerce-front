@@ -19,6 +19,7 @@ type CreateCustomerFormProps = {
 type LoginCustomerFormProps = {
   onComplete: () => void
 }
+// TODO - Refactor to create re usable inputs/forms and restructure these
 
 export function LoginCustomerForm(props: LoginCustomerFormProps) {
   const {
@@ -28,7 +29,7 @@ export function LoginCustomerForm(props: LoginCustomerFormProps) {
     formState: { errors },
   } = useForm()
   const { dispatch } = React.useContext(CustomerContext)
-
+  const [error, setError] = React.useState<string | null>(null)
   const [login] = useLoginMutation({
     onCompleted: (data) => {
       const token = data.login?.token
@@ -40,7 +41,7 @@ export function LoginCustomerForm(props: LoginCustomerFormProps) {
     },
     onError: (err) => {
       // Catches error instead of crashing app
-      console.log(err, "ERROR")
+      setError(err.message)
     },
   })
 
@@ -59,6 +60,7 @@ export function LoginCustomerForm(props: LoginCustomerFormProps) {
       <input {...register("username")} />
       <label htmlFor="password">Password</label>
       <input {...register("password")} type="password" />
+      {error && <span>{error}</span>}
       <input type="submit"></input>
     </form>
   )
@@ -116,6 +118,7 @@ export function CreateCustomerForm(props: CreateCustomerFormProps) {
   )
 }
 
+// TODO check for address first then pre populate with address on file
 function CreateAddressForm(props: { onComplete: () => void }) {
   const {
     register,
@@ -177,9 +180,9 @@ function CreateOrderForm() {
     formState: { errors },
   } = useForm()
 
-  const { cart } = useCart()
+  const { cart, clearCart } = useCart()
   const [createOrder, { data, loading: isLoading, error }] =
-    useCreateOrderMutation()
+    useCreateOrderMutation({ onCompleted: () => clearCart() })
 
   // Add Context for Order?
   const onSubmit = () => {
