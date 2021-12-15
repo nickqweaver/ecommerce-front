@@ -7,12 +7,12 @@ import { ProductTileFragment } from "src/graphql/generated/types"
 import { Button } from "../UI/Button"
 import { Image } from "../UI/Image"
 
-const Card = styled.div`
-  padding: 32px 16px;
+export const Card = styled.div`
+  padding: var(--space-x4) var(--space-x2);
   background-color: #fff;
   display: flex;
-  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
-  border-radius: 6px;
+  box-shadow: var(--light-box-shadow);
+  border-radius: var(--default-border-radius);
   flex-direction: column;
   align-items: center;
   min-width: 290px;
@@ -22,7 +22,7 @@ const Card = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 24px;
+  padding: var(--space-x0) var(--space-x3);
   height: 100%;
 `
 
@@ -33,11 +33,12 @@ const CardText = styled.div`
 
 const Tag = styled.span<{ isBold?: boolean; color?: string }>`
   font-weight: ${(props) => (props.isBold ? 500 : 300)};
+  font-size: var(--secondary-font-color);
 `
 
 const ButtonWrapper = styled.div`
   display: flex;
-  margin-top: 32px;
+  margin-top: var(--space-x4);
 `
 
 type ProductCardLoaderProps = {}
@@ -69,7 +70,7 @@ export function ProductCard(props: ProductTileFragment) {
             <h5 style={{ fontWeight: 500, marginTop: `calc(3rem - 16px)` }}>
               {props.name}
             </h5>
-            <Tag className="secondary-font-color">{price}</Tag>
+            <Tag>{price}</Tag>
             <Tag isBold>{props.brand}</Tag>
           </CardText>
           <ButtonWrapper>

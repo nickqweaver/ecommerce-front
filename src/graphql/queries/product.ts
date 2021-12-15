@@ -21,3 +21,12 @@ export const GET_PRODUCT_BY_SLUG = gql`
   }
   ${Product}
 `
+
+export const GET_PRODUCT_BY_ID = gql`
+  query getProductById($id: ID!) {
+    getProductById(id: $id) {
+      ...Product
+    }
+  }
+  ${Product}
+`

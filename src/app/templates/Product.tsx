@@ -8,10 +8,17 @@ import { Variants } from "../components/Variant/Variants"
 import { Page } from "../components/UI/Page"
 import { Image } from "../components/UI/Image"
 import { FlexWrapper } from "../components/UI/FlexWrapper"
+import { Button } from "../components/UI/Button"
+import { useCart } from "../hooks/useCart"
+
 // TODO add context
 export function Product() {
   let { slug } = useParams<{ slug: string }>()
-  const { data, loading: isLoading, error } = useGetProductBySlugQuery({
+  const {
+    data,
+    loading: isLoading,
+    error,
+  } = useGetProductBySlugQuery({
     variables: { slug },
   })
   const variants = data?.getProductBySlug?.variants
@@ -20,6 +27,7 @@ export function Product() {
     getActiveVariant,
     { data: activeVariantData, loading: isActiveVariantDataLoading },
   ] = useGetVariantByIdLazyQuery()
+  const { updateCart } = useCart()
   const productId = data?.getProductBySlug?.id
   const description = data?.getProductBySlug?.description
 
@@ -46,6 +54,8 @@ export function Product() {
       : `${quantity} Left`
   }
 
+  const activeVariant = activeVariantData?.getVariantById
+
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -60,14 +70,11 @@ export function Product() {
           <h4 style={{ fontWeight: 600 }}>{data?.getProductBySlug?.name}</h4>
           {activeVariantId && !isActiveVariantDataLoading && (
             <>
-              <span>${activeVariantData?.getVariantById?.unitPrice}</span>
-              <span>SKU: {activeVariantData?.getVariantById?.productCode}</span>
-              <span>
-                {checkStock(activeVariantData?.getVariantById?.stock ?? 0)}
-              </span>
+              <span>${activeVariant?.unitPrice}</span>
+              <span>SKU: {activeVariant?.productCode}</span>
+              <span>{checkStock(activeVariant?.stock ?? 0)}</span>
             </>
           )}
-
           {variants && variationOptions && (
             <Variants
               variants={variants}
@@ -75,6 +82,38 @@ export function Product() {
               setActiveVariantId={setActiveVariantId}
             />
           )}
+          <Button
+            style={{ marginTop: "var(--space-x4)" }}
+            onClick={() =>
+              updateCart({
+                type: "ADD_CART_ITEM",
+                payload: {
+                  item: {
+                    variantId: activeVariant?.id,
+                    quantity: 1,
+                    productId: data?.getProductBySlug?.id,
+                    unitPrice: parseFloat(activeVariant?.unitPrice),
+                  },
+                },
+              })
+            }
+          >
+            Add to Cart
+          </Button>
+          <Button
+            style={{ marginTop: "var(--space-x4)" }}
+            onClick={() => {
+              if (activeVariant?.productCode)
+                updateCart({
+                  type: "DELETE_CART_ITEM",
+                  payload: {
+                    productCode: activeVariant?.productCode,
+                  },
+                })
+            }}
+          >
+            Delete Item
+          </Button>
         </FlexWrapper>
       </FlexWrapper>
       {description && (
