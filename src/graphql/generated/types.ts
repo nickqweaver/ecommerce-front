@@ -733,7 +733,6 @@ export type MutationCreateCustomerArgs = {
 
 export type MutationCreateAddressArgs = {
   address?: Maybe<AddressInput>;
-  userId?: Maybe<Scalars['ID']>;
 };
 
 
@@ -823,19 +822,19 @@ export type PaginatedProductsType = {
 
 export type ProductType = {
   __typename?: 'ProductType';
-  name: Scalars['String'];
   id: Scalars['ID'];
-  image: CloudinaryImageType;
+  name: Scalars['String'];
   description: Scalars['String'];
   category: CategoryType;
+  brand: Scalars['String'];
   createdDate: Scalars['Date'];
   slug: Scalars['String'];
   weight: Scalars['Decimal'];
-  variants: Array<AllVariantsType>;
-  brand: Scalars['String'];
-  lowestVariantPrice: Scalars['Decimal'];
+  variants?: Maybe<Array<AllVariantsType>>;
   hasDifferentVariantPricing: Scalars['Boolean'];
+  lowestVariantPrice: Scalars['Decimal'];
   variationOptions?: Maybe<Array<VariationOptionType>>;
+  image: CloudinaryImageType;
 };
 
 export type ProfileType = {
@@ -850,10 +849,11 @@ export type Query = {
   getCustomer?: Maybe<CustomerType>;
   getOrders?: Maybe<Array<Maybe<OrderType>>>;
   getVariantById?: Maybe<AllVariantsType>;
-  getAllProducts?: Maybe<Array<Maybe<ProductType>>>;
+  getAllProducts?: Maybe<Array<ProductType>>;
   getProductById?: Maybe<ProductType>;
   getAllPaginatedProducts?: Maybe<PaginatedProductsType>;
   getProductBySlug?: Maybe<ProductType>;
+  getBaseProd?: Maybe<Array<ProductType>>;
   getAllCategories?: Maybe<Array<Maybe<CategoryType>>>;
   getProductIdsFromCategory?: Maybe<Array<Maybe<Scalars['ID']>>>;
   getPaginatedProductIdsFromCategory?: Maybe<PaginatedProductIdsType>;
@@ -997,13 +997,13 @@ export type ProductFragment = (
   ), category: (
     { __typename?: 'CategoryType' }
     & CategoryFragment
-  ), variants: Array<(
+  ), variants?: Maybe<Array<(
     { __typename?: 'WheelVariantType' }
     & WheelVariantFragment
   ) | (
     { __typename?: 'TireVariantType' }
     & TireVariantFragment
-  )> }
+  )>> }
 );
 
 export type ProductTileFragment = (
