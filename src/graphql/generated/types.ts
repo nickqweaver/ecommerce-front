@@ -1096,6 +1096,19 @@ export type LoginMutation = (
   )> }
 );
 
+export type VerifyTokenMutationVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type VerifyTokenMutation = (
+  { __typename?: 'Mutation' }
+  & { verifyToken?: Maybe<(
+    { __typename?: 'Verify' }
+    & Pick<Verify, 'payload'>
+  )> }
+);
+
 export type GetAllProductTilesQueryVariables = Exact<{
   offset: Scalars['Int'];
   limit: Scalars['Int'];
@@ -1433,6 +1446,38 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const VerifyTokenDocument = gql`
+    mutation verifyToken($token: String!) {
+  verifyToken(token: $token) {
+    payload
+  }
+}
+    `;
+export type VerifyTokenMutationFn = Apollo.MutationFunction<VerifyTokenMutation, VerifyTokenMutationVariables>;
+
+/**
+ * __useVerifyTokenMutation__
+ *
+ * To run a mutation, you first call `useVerifyTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyTokenMutation, { data, loading, error }] = useVerifyTokenMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useVerifyTokenMutation(baseOptions?: Apollo.MutationHookOptions<VerifyTokenMutation, VerifyTokenMutationVariables>) {
+        return Apollo.useMutation<VerifyTokenMutation, VerifyTokenMutationVariables>(VerifyTokenDocument, baseOptions);
+      }
+export type VerifyTokenMutationHookResult = ReturnType<typeof useVerifyTokenMutation>;
+export type VerifyTokenMutationResult = Apollo.MutationResult<VerifyTokenMutation>;
+export type VerifyTokenMutationOptions = Apollo.BaseMutationOptions<VerifyTokenMutation, VerifyTokenMutationVariables>;
 export const GetAllProductTilesDocument = gql`
     query getAllProductTiles($offset: Int!, $limit: Int!) {
   getAllPaginatedProducts(offset: $offset, limit: $limit) {

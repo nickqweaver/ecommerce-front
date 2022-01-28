@@ -1,16 +1,16 @@
-import React, { FC } from "react"
-import { useForm } from "react-hook-form"
-import { Redirect } from "react-router"
-import { CustomerContext } from "src/app/context/customer"
-import { useCart } from "src/app/hooks/useCart"
+import React, { FC } from 'react'
+import { useForm } from 'react-hook-form'
+import { Redirect } from 'react-router'
+import { CustomerContext } from 'src/app/context/customer'
+import { useCart } from 'src/app/hooks/useCart'
 import {
   useCreateOrderMutation,
   useCreateCustomerMutation,
   useLoginMutation,
   useCreateAddressMutation,
   CustomerAddressCountryChoices,
-} from "src/graphql/generated/types"
-import { Button } from "../UI/Button"
+} from 'src/graphql/generated/types'
+import { Button } from '../UI/Button'
 
 type CreateCustomerFormProps = {
   onComplete: () => void
@@ -35,7 +35,7 @@ export function LoginCustomerForm(props: LoginCustomerFormProps) {
       const token = data.login?.token
       const customer = data.login?.customer
       if (token && customer) {
-        dispatch({ type: "LOGIN", payload: { customer, token } })
+        dispatch({ type: 'LOGIN', payload: { customer, token } })
       }
       props.onComplete()
     },
@@ -57,9 +57,9 @@ export function LoginCustomerForm(props: LoginCustomerFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="username">Username</label>
-      <input {...register("username")} />
+      <input {...register('username')} />
       <label htmlFor="password">Password</label>
-      <input {...register("password")} type="password" />
+      <input {...register('password')} type="password" />
       {error && <span>{error}</span>}
       <input type="submit"></input>
     </form>
@@ -79,13 +79,13 @@ export function CreateCustomerForm(props: CreateCustomerFormProps) {
       const token = data.createCustomer?.token
       const customer = data.createCustomer?.customer
       if (token && customer) {
-        dispatch({ type: "LOGIN", payload: { customer, token } })
+        dispatch({ type: 'LOGIN', payload: { customer, token } })
       }
       props.onComplete()
     },
     onError: (err) => {
       // Catches error instead of crashing app
-      console.log(err, "ERROR")
+      console.log(err, 'ERROR')
     },
   })
   const { dispatch } = React.useContext(CustomerContext)
@@ -107,12 +107,12 @@ export function CreateCustomerForm(props: CreateCustomerFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="email">Email</label>
-      <input {...register("email", { required: true })} />
+      <input {...register('email', { required: true })} />
       {errors.email && <span>This field is required</span>}
       <label htmlFor="username">Username</label>
-      <input {...register("username")} />
+      <input {...register('username')} />
       <label htmlFor="password">Password</label>
-      <input {...register("password")} type="password" />
+      <input {...register('password')} type="password" />
       <input type="submit"></input>
     </form>
   )
@@ -126,7 +126,6 @@ function CreateAddressForm(props: { onComplete: () => void }) {
     watch,
     formState: { errors },
   } = useForm()
-
   const [createAddress] = useCreateAddressMutation({
     onCompleted: () => props.onComplete(),
   })
@@ -156,15 +155,15 @@ function CreateAddressForm(props: { onComplete: () => void }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="Address 1">Address 1</label>
-      <input {...register("line1")}></input>
+      <input {...register('line1')}></input>
       <label htmlFor="Address 2">Address 2</label>
-      <input {...register("line2")}></input>
+      <input {...register('line2')}></input>
       <label htmlFor="city">City</label>
-      <input {...register("city")}></input>
+      <input {...register('city')}></input>
       <label htmlFor="state">State</label>
-      <input {...register("state")}></input>
+      <input {...register('state')}></input>
       <label htmlFor="zip">City</label>
-      <input {...register("zip")}></input>
+      <input {...register('zip')}></input>
       <label htmlFor="zip">Country</label>
       {/* <input value="USA" {...register("country")}></input> */}
       <input type="submit"></input>
@@ -222,7 +221,7 @@ export const JoinOrLogin = (props: JoinOrLoginProps) => {
         <LoginCustomerForm onComplete={props.onComplete} />
       )}
       <Button onClick={() => setShouldJoin(!shouldJoin)}>
-        {shouldJoin ? "Login" : "Create Account"}
+        {shouldJoin ? 'Login' : 'Create Account'}
       </Button>
     </>
   )
@@ -230,12 +229,12 @@ export const JoinOrLogin = (props: JoinOrLoginProps) => {
 
 export const CheckoutForm = () => {
   const [step, setStep] = React.useState<
-    "validateCustomer" | "addAddress" | "createOrder"
-  >("validateCustomer")
-  return step === "validateCustomer" ? (
-    <JoinOrLogin onComplete={() => setStep("addAddress")} />
-  ) : step === "addAddress" ? (
-    <CreateAddressForm onComplete={() => setStep("createOrder")} />
+    'validateCustomer' | 'addAddress' | 'createOrder'
+  >('validateCustomer')
+  return step === 'validateCustomer' ? (
+    <JoinOrLogin onComplete={() => setStep('addAddress')} />
+  ) : step === 'addAddress' ? (
+    <CreateAddressForm onComplete={() => setStep('createOrder')} />
   ) : (
     <CreateOrderForm />
   )

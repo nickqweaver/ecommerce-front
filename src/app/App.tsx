@@ -1,11 +1,10 @@
-import React from "react"
-import { Products } from "./pages/Products"
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import { Product } from "./templates/Product"
-import { CartContextProvider } from "./context/cart"
-import { Layout } from "./layout/Layout"
-import { Cart } from "./pages/Cart"
-import { CustomerContextProvider } from "./context/customer"
+import { Products } from './pages/Products'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Product } from './templates/Product'
+import { CartContextProvider } from './context/cart'
+import { Layout } from './layout/Layout'
+import { Cart } from './pages/Cart'
+import { CustomerContextProvider } from './context/customer'
 
 function App() {
   return (
