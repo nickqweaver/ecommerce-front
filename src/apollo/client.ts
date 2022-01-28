@@ -12,6 +12,7 @@ const authLink = setContext((_, { headers }) => {
   const expiredAt = payload?.exp ? payload.exp * 1000 : 0
   if (Date.now() >= expiredAt) {
     // https://www.apollographql.com/docs/react/api/link/apollo-link-context/
+    sessionStorage.setItem('token', '')
     token = ''
     // Need to figure out how often we plan to refresh the token
   }
